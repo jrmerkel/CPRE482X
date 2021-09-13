@@ -1,8 +1,11 @@
 #include<stdio.h>
 #include<stdlib.h>
+#include<string>
+#include<iostream>
 
 // Implement the layers as functions
-
+using namespace std;
+void load_input(string filename, int x_dim, int y_dim, int channels, float * out);
 int main()
 
 {
@@ -11,7 +14,17 @@ int main()
 
 		// Load the input data from binary file.
 			// First load the flattened array then reshape according to input dimensions.
-
+		float out[64][64][3];
+		load_input("/home/augustom/482/CPRE482X/cImp/Template_Visual_Studio/Test_Input0/input.bin", 64, 64, 3, (float *)out);
+		for(int k=0; k<3; k++){
+			for(int i=0; i<64; i++){
+				for(int j=0; j<64; j++){
+					cout << out[i][j][k] << "\t";
+				}
+				cout << endl;
+			}
+			cout << "\n\n";
+		}
 
 		// Load the weights data from binary files.
 			// First load the flattened array then reshape according to weights/bias dimensions.
@@ -38,4 +51,26 @@ int main()
 		// Execute the inference code and validate against the imported inference output. 
 		// For each of the input, for all of the intermediate feature maps provide the binary files for both the imported feature maps from python (true value) and the ones predicted by your own C/C++ implementation.
 		// Were you able to get similar final classification probability as the python version executing? if not what was the difference.
+}
+
+void load_input(string filename, int x_dim, int y_dim, int channels, float * out){
+	//save every 32 bits of info (float32) from input stream into one matrix element
+	FILE* ptr_weights = fopen("/home/augustom/482/CPRE482X/cImp/Template_Visual_Studio/Test_Input0/input.bin", "rb");  // r for read, b for binary
+	float input[x_dim*y_dim*channels];
+	if(ptr_weights!=NULL){
+		int r2 = fread(input, sizeof(float), (x_dim*y_dim*channels), ptr_weights);
+		printf("Read weight values: %d\n", r2);
+	}
+	cout << input[0] << endl;
+	fclose(ptr_weights);
+	//float out[x_dim][y_dim][channels];
+	int c = 0;
+	for(int k=0; k<channels; k++){
+		for(int i=0; i<x_dim; i++){
+			for(int j=0; j<y_dim; j++){
+				*(out + i + x_dim *j + x_dim*y_dim*k) = input[i];
+				c++;
+			}
+		}
+	}
 }
