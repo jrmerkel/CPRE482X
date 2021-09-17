@@ -1,0 +1,53 @@
+void conv2d(float * input_tensor, float * weights, float * biases, float * output_tensor, int * input_dim, int * weight_dim)
+{
+	//input terms
+	int w = *(input_dim);
+	int h = *(input_dim + 1);
+	int c = *(input_dim + 2);
+
+	//filter term
+	int s = *(weight_dim);
+	int r = *(weight_dim + 1);
+	//int c = *weight_dim + 2
+	int m = *(weight_dim + 3);
+
+	//calculate P and Q which is the resulting size (we are using U = 1)
+	int p = h - r;
+	int q = w - s;
+	//float (&output_tensor_arrform)[p,q,m] = (float*) malloc(m * p * q * sizeof(float));
+	float matrix_output[p][q][m];
+	// o[n][m][p][q] = sumc sum r sums i[n][c][p+r][q+s] * f[m][c][r][s] + b[m]
+	//where n = 1
+	for(int x = 0; x < m; x++)
+	{
+		for(int y = 0; y < p; y++)
+		{
+			for(int z = 0; z < q; z++)
+			{
+				matrix_output[x][y][z] = 0;
+				for(int i = 0; i < c; i++)
+				{
+					for(int j = 0; j < r; j++)
+					{
+						for(int k = 0; k < s; k++)
+						{
+							//matrix[m][p][q] = i[c][p + r][q + s] * f[m][c][r][s]
+							matrix_output[x][y][z] +=  *(input_tensor + (k+z) + (s+y)*s + r*s*i) * *(weights + k + s*j + r*s*i + r*s*c*m);
+						}
+					}
+				}
+				//Add bias
+				matrix_output[x][y][z] += *(biases + m);
+				//activation function relu if negative then 0
+				if(matrix_output[x][y][z] < 0)
+				{
+					matrix_output[x][y][z] = 0;
+				} 
+			}
+		}
+	}
+
+	//copy stack array into output tensor pointer
+	memcpy(output_tensor, matrix_output, sizeof(float) * m * p * q);
+
+}
