@@ -51,3 +51,28 @@ void conv2d(float * input_tensor, float * weights, float * biases, float * outpu
 	memcpy(output_tensor, matrix_output, sizeof(float) * m * p * q);
 
 }
+
+
+void load_input(string filename, int x_dim, int y_dim, int channels, float * out)
+{
+	//save every 32 bits of info (float32) from input stream into one matrix element
+	FILE* ptr_weights = fopen(filename.c_str(), "rb");  // r for read, b for binary
+	if(ptr_weights!=NULL)
+	{
+		int r2 = fread(out, sizeof(float), (x_dim*y_dim*channels), ptr_weights);
+		printf("Read input values: %d\n", r2);
+	}
+	fclose(ptr_weights);
+}
+
+void load_weights(string filename, int dim[4], float * weights)
+{
+	//save every 32 bits of info (float32) from input stream into one matrix element
+	FILE* ptr_weights = fopen(filename.c_str(), "rb");  // r for read, b for binary
+	if(ptr_weights!=NULL)
+	{
+		int r2 = fread(weights, sizeof(float), (dim[0] * dim[1] * dim[2] * dim[3]), ptr_weights);
+		printf("Read weight values: %d\n", r2);
+	}
+	fclose(ptr_weights);
+}

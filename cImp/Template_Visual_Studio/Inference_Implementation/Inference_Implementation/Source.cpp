@@ -1,5 +1,6 @@
 #include "source.h"
 #include "conv2d.h"
+#include "maxpool2d.h"
 // Implement the layers as functions
 
 
@@ -10,10 +11,9 @@ int main()
 
 
 		// Load the input data from binary file.
-			// First load the flattened array then reshape according to input dimensions.
+		// First load the flattened array then reshape according to input dimensions.
 		float input[64][64][3];
-		int input_dim[3] = { 64, 64, 3};
-		load_input("../../Image4/input4.bin", 64, 64, 3, (float *)input);
+		load_input("../../Image4/input4.bin", input);
 			//Print out some test values to see if we are matching the input. 
 		//For x_val[4] we should see
 			/*
@@ -36,181 +36,107 @@ int main()
 		cout << "001 " << input[0][0][1] << endl;
 
 		// Load the weights data from binary files.
-			// First load the flattened array then reshape according to weights/bias dimensions.
+		// First load the flattened array then reshape according to weights/bias dimensions.
 		float weights_layer0[5][5][3][32];
-		/* should see
-			0000 -0.021224262
-			1000 0.06164234
-			0100 0.03920702
-			0010 -0.0036433637
-			0001 0.0074597695
-		*/
-		int dim_layer0[4] = {5,5,32,32};
-		load_weights("../../Our_export/conv2d_weights.bin", dim_layer0, (float *) weights_layer0);
-
-		cout << "0000 " << weights_layer0[0][0][0][0] << endl;
-
-		cout << "1000 " << weights_layer0[1][0][0][0] << endl;
-
-		cout << "0100 " << weights_layer0[0][1][0][0] << endl;
-
-		cout << "0010 " << weights_layer0[0][0][1][0] << endl;
-
-		cout << "0001 " << weights_layer0[0][0][0][1] << endl;
-
 		float biases_layer0[32];
-		load_biases("../../Our_export/conv2d_bias.bin", 32, biases_layer0);
-		//Should be 0.00828
-		cout << "0 " <<biases_layer0[0] << endl;
 
+		float weights_layer1[5][5][32][32];
+		float biases_layer1[32];
+
+		float weights_layer2[3][3][32][64];
+		float biases_layer2[64];
+
+		float weights_layer3[3][3][64][64];
+		float biases_layer3[64];
+
+		float weights_layer4[3][3][64][64];
+		float biases_layer4[64];
+
+		float weights_layer5[3][3][64][128];
+		float biases_layer5[64];
+
+		float weights_dense0[2048][256];
+		float biases_dense0[64];
+
+		float weights_dense1[256][200];
+		float biases_dense1[200];
+		
+		load_weights("../../Our_export/conv2d_weights.bin", weights_layer0);
+		load_weights("../../Our_export/conv2d_1_weights.bin", weights_layer1);
+		load_weights("../../Our_export/conv2d_2_weights.bin", weights_layer2);
+		load_weights("../../Our_export/conv2d_3_weights.bin", weights_layer3);
+		load_weights("../../Our_export/conv2d_4_weights.bin", weights_layer4);
+		load_weights("../../Our_export/conv2d_5_weights.bin", weights_layer5);
+
+		load_weights("../../Our_export/dense_weights.bin", weights_dense0);
+		load_weights("../../Our_export/dense_1_weights.bin", weights_dense1);
+
+
+		load_biases("../../Our_export/conv2d_bias.bin",biases_layer0);
+		load_biases("../../Our_export/conv2d_1_bias.bin",biases_layer1);
+		load_biases("../../Our_export/conv2d_2_bias.bin",biases_layer2);
+		load_biases("../../Our_export/conv2d_3_bias.bin",biases_layer3);
+		load_biases("../../Our_export/conv2d_4_bias.bin",biases_layer4);
+		load_biases("../../Our_export/conv2d_5_bias.bin",biases_layer5);
+
+		load_biases("../../Our_export/conv2d_4_bias.bin",biases_dense0);
+		load_biases("../../Our_export/conv2d_5_bias.bin",biases_dense1);
 		// Load the intermediate feature map data from binary files.
-		 // First load the flattened array then reshape according to intermediate feature map dimensions.
-		int dim_fmap0[3] = {60, 60, 32};
+		// First load the flattened array then reshape according to intermediate feature map dimensions.
 		float fmap_layer0[60][60][32];
-		load_intermediate_maps("../../Our_export/4conv2dintermediate.bin", dim_fmap0, (float *) fmap_layer0);
-		/*
-			000 0.268127
-			100 0.16241197
-			010 0.28409594
-			001 0.13051246
-		*/
-		cout << "000 " << fmap_layer0[0][0][0] << endl;
+		float fmap_layer1[56][56][32];
+		float fmap_layer2[26][26][64];
+		float fmap_layer3[24][24][64];
+		float fmap_layer4[10][10][64];
+		float fmap_layer5[8][8][128];
 
-		cout << "100 " << fmap_layer0[1][0][0] << endl;
+		float fmap_dense0[256];
+		float fmap_dense1[200];
 
-		cout << "010 " << fmap_layer0[0][1][0] << endl;
-
-		cout << "001 " << fmap_layer0[0][0][1] << endl;
+		float fmap_maxpool0[28][28][32];
+		float fmap_maxpool1[12][12][64];
+		float fmap_maxpool2[4][4][128];
 
 
+		load_intermediate_maps("../../Our_export/4conv2dintermediate.bin", fmap_layer0);
+		load_intermediate_maps("../../Our_export/4conv2d_1intermediate.bin", fmap_layer1);
+		load_intermediate_maps("../../Our_export/4conv2d_2intermediate.bin", fmap_layer2);
+		load_intermediate_maps("../../Our_export/4conv2d_3intermediate.bin", fmap_layer3);
+		load_intermediate_maps("../../Our_export/4conv2d_4intermediate.bin", fmap_layer4);
+		load_intermediate_maps("../../Our_export/4conv2d_5intermediate.bin", fmap_layer5);
+
+		load_intermediate_maps("../../Our_export/4denseintermediate.bin", fmap_dense0);
+		load_intermediate_maps("../../Our_export/4dense_1intermediate.bin", fmap_dense1);
+
+		load_intermediate_maps("../../Our_export/4max_pooling2dintermediate.bin", fmap_maxpool0);
+		load_intermediate_maps("../../Our_export/4max_pooling2d_1intermediate.bin", fmap_maxpool1);
+		load_intermediate_maps("../../Our_export/4max_pooling2d_2intermediate.bin", fmap_maxpool2);
 		// Execute the inference code and validate against the imported inference output. 
 		// For each of the input, for all of the intermediate feature maps provide the binary files for both the imported feature maps from python (true value) and the ones predicted by your own C/C++ implementation.
 		// Were you able to get similar final classification probability as the python version executing? if not what was the difference.
+		float output_layer0[60][60][32];
+		float output_layer1[56][56][32];
+		float output_layer2[26][26][64];
+		float output_layer3[24][24][64];
+		float output_layer4[10][10][64];
+		float output_layer5[8][8][128];
+
+		float output_dense0[256];
+		float output_dense1[200];
+
+		float output_maxpool0[28][28][32];
+		float output_maxpool1[12][12][64];
+		float output_maxpool2[4][4][128];
 
 		//First Conv2d
-		float layer0_output[60][60][32];
-		conv2d(input, weights_layer0, biases_layer0, (float * )layer0_output);
-		cout << "000 " << layer0_output[0][0][0] << endl;
-
-		cout << "100 " << layer0_output[1][0][0] << endl;
-
-		cout << "010 " << layer0_output[0][1][0] << endl;
-
-		cout << "001 " << layer0_output[0][0][1] << endl;
-
+		conv2d(input, weights_layer0, biases_layer0, (float * )output_layer0);
+		compareMatrix3d(output_layer0, fmap_layer0);
 		//Which goes into Conv2d_1
-		
-}
-
-void load_input(string filename, int x_dim, int y_dim, int channels, float * out)
-{
-	//save every 32 bits of info (float32) from input stream into one matrix element
-	FILE* ptr_weights = fopen(filename.c_str(), "rb");  // r for read, b for binary
-	if(ptr_weights!=NULL)
-	{
-		int r2 = fread(out, sizeof(float), (x_dim*y_dim*channels), ptr_weights);
-		printf("Read input values: %d\n", r2);
-	}
-	fclose(ptr_weights);
-}
-
-void load_weights(string filename, int dim[4], float * weights)
-{
-	//save every 32 bits of info (float32) from input stream into one matrix element
-	FILE* ptr_weights = fopen(filename.c_str(), "rb");  // r for read, b for binary
-	if(ptr_weights!=NULL)
-	{
-		int r2 = fread(weights, sizeof(float), (dim[0] * dim[1] * dim[2] * dim[3]), ptr_weights);
-		printf("Read weight values: %d\n", r2);
-	}
-	fclose(ptr_weights);
-}
-
-void load_biases(string filename, int biaslength, float * biases)
-{
-	//save every 32 bits of info (float32) from input stream into one matrix element
-	FILE* ptr_weights = fopen(filename.c_str(), "rb");  // r for read, b for binary
-	if(ptr_weights!=NULL)
-	{
-		int r2 = fread(biases, sizeof(float), (biaslength), ptr_weights);
-		printf("Read biases values: %d\n", r2);
-	}
-	fclose(ptr_weights);
-}
-
-//Just a function to help us test
-void load_intermediate_maps(string filename, int dim[3], float * ifmap)
-{
-	//save every 32 bits of info (float32) from input stream into one matrix element
-	FILE* ptr_weights = fopen(filename.c_str(), "rb");  // r for read, b for binary
-	if(ptr_weights!=NULL)
-	{
-		int r2 = fread(ifmap, sizeof(float), (dim[0] * dim[1] * dim[2]), ptr_weights);
-		printf("Read fmap values: %d\n", r2);
-	}
-	fclose(ptr_weights);
-}
-/**
- * Input tensor is a 3 dimensional array of floats specified by the first 3 ints in input_dim
- * The input tensor is matrix multiplied by the weight matrix specified by the weight dim (4 dim) and placed into the output tensor
- * 
- */
-
-
-/**
- * Same concept as conv2d except there's no weight matrix, just max pooling based on dimension
- * Input tensor is a 3 dimensional array of floats specified by the first 3 ints in input_dim
- * The input tensor is matrix multiplied by the weight matrix specified by the weight dim (4 dim) and placed into the output tensor
- * 
- */
-void maxPool2D(float * input_tensor, float * output_tensor, int * input_dim, int * pooling_dim)
-{
-	//input terms
-	int w = *(input_dim);
-	int h = *(input_dim + 1);
-	int c = *(input_dim + 2);
-
-	//filter term
-	int s = *(pooling_dim);
-	int r = *(pooling_dim + 1);
-	//int c = *weight_dim + 2 duplicated with input_dim
-	int m = *(pooling_dim + 3);
-
-	//calculate P and Q which is the resulting size (we are using U = 1)
-	int p = h - r;
-	int q = w - s;
-	//float (&output_tensor_arrform)[p,q,m] = (float*) malloc(m * p * q * sizeof(float));
-	float matrix_output[p][q][m];
-	// o[n][m][p][q] = sumc sum r sums i[n][c][p+r][q+s] * f[m][c][r][s] + b[m]
-	//where n = 1
-	for(int x = 0; x < m; x++)
-	{
-		for(int y = 0; y < p; y++)
-		{
-			for(int z = 0; z < q; z++)
-			{
-				//init as the first num in the pool
-				matrix_output[x][y][z]  =  *(input_tensor + y*s + z);
-				for(int i = 0; i < c; i++)
-				{
-					for(int j = 0; j < r; j++)
-					{
-						for(int k = 0; k < s; k++)
-						{
-							if(*(input_tensor + (k+z) + (s+y)*s + r*s*i) > matrix_output[x][y][z])
-							{
-								matrix_output[x][y][z] =  *(input_tensor + (k+z) + (s+y)*s + r*s*i);
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-	
-	//copy stack array into output tensor pointer
-	memcpy(output_tensor, matrix_output, sizeof(float) * m * p * q);
-
+		conv2d(output_layer0, weights_layer1, biases_layer1, (float *) output_layer1);
+		compareMatrix3d(output_layer1, fmap_layer1);
+		//Which goes into max pooling
+		maxPool2D(output_layer1, (float * )output_maxpool0);
+		compareMatrix3d(output_maxpool0, fmap_maxpool0);
 }
 
 /**
