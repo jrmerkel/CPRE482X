@@ -8,7 +8,6 @@
 using namespace std;
 
 #define TOLERANCE 0.00001f
-#define SOFTMAXTOLERANCE 0.01f
 
 //Should've done loads as 1d, 2d etc but that's a stretch goal
 template<int N, int C>
@@ -130,21 +129,6 @@ bool compare1d(float (&arrA)[x], float (&arrB)[x])
     cout << "Arrays match" << endl;
     return true;
 }
-template<int x>
-bool compare1dsoftmax(float (&arrA)[x], float (&arrB)[x])
-{
-    for (int i = 0; i < x; i++)
-    {
-        if(abs(arrA[i] - arrB[i]) > SOFTMAXTOLERANCE)
-        {
-            cout << i << " " << arrA[i] << " " << arrB[i] << endl;
-            cout << "!!!!!!!!!MISMATCH!!!!!!!!" << endl;
-            return false;
-        }
-    }
-    cout << "Arrays match" << endl;
-    return true;
-}
 
 template<int N>
 // Parameters: N: compares two 1d arrays of size N and returns the maximum difference
@@ -168,4 +152,28 @@ float comparemax1d(float (&Input1)[N], float (&Input2)[N]) {
     cout << "expected " << Input1[index] << " actual " << Input2[index] << endl;
     return max_diff;
 
+}
+
+template<int X, int Y, int Z>
+void export_binary(float (&fmap)[X][Y][Z], string filename)
+{
+    FILE* ptr_weights = fopen(filename.c_str(), "wb");  // r for read, b for binary
+	if(ptr_weights!=NULL)
+	{
+		int w2 = fwrite(fmap, sizeof(float), (X*Y*Z), ptr_weights);
+		printf("wrote binary to : %s\n", filename.c_str());
+	}
+	fclose(ptr_weights);
+}
+
+template<int X>
+void export_binary(float (&fmap)[X], string filename)
+{
+    FILE* ptr_weights = fopen(filename.c_str(), "wb");  // r for read, b for binary
+	if(ptr_weights!=NULL)
+	{
+		int w2 = fwrite(fmap, sizeof(float), (X), ptr_weights);
+		printf("wrote binary to : %s\n", filename.c_str());
+	}
+	fclose(ptr_weights);
 }

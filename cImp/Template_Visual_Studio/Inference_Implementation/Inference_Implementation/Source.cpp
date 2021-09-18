@@ -5,16 +5,17 @@
 
 // Implement the layers as functions
 
-
+//Stretch goal implement as a loop
 int main()
 {
 	// Do this for all the three chosen inputs:
+	//Our chosen inputs are the 4th, 6th, and 8th image
 
 
 		// Load the input data from binary file.
 		// First load the flattened array then reshape according to input dimensions.
 		float input[64][64][3];
-		load_input("../../Image4/input4.bin", input);
+		load_input("../JupyterExport/input4.bin", input);
 			//Print out some test values to see if we are matching the input. 
 		//For x_val[4] we should see
 			/*
@@ -62,32 +63,25 @@ int main()
 		float weights_dense1[256][200];
 		float biases_dense1[200];
 		
-		load_weights("../../Our_export/conv2d_weights.bin", weights_layer0);
-		load_weights("../../Our_export/conv2d_1_weights.bin", weights_layer1);
-		load_weights("../../Our_export/conv2d_2_weights.bin", weights_layer2);
-		load_weights("../../Our_export/conv2d_3_weights.bin", weights_layer3);
-		load_weights("../../Our_export/conv2d_4_weights.bin", weights_layer4);
-		load_weights("../../Our_export/conv2d_5_weights.bin", weights_layer5);
+		load_weights("../JupyterExport/conv2d_weights.bin", weights_layer0);
+		load_weights("../JupyterExport/conv2d_1_weights.bin", weights_layer1);
+		load_weights("../JupyterExport/conv2d_2_weights.bin", weights_layer2);
+		load_weights("../JupyterExport/conv2d_3_weights.bin", weights_layer3);
+		load_weights("../JupyterExport/conv2d_4_weights.bin", weights_layer4);
+		load_weights("../JupyterExport/conv2d_5_weights.bin", weights_layer5);
 
-		load_weights("../../Our_export/dense_weights.bin", weights_dense0);
-		load_weights("../../Our_export/test2.bin", weights_dense1);
+		load_weights("../JupyterExport/dense_weights.bin", weights_dense0);
+		load_weights("../JupyterExport/test2.bin", weights_dense1);
 
-		cout << "weight " << "00 " << weights_dense1[0][0]<< endl;
-		// for(int i = 0; i < 256; i++)
-		// {
-		// 	 cout << "weight " << i << " " << weights_dense1[i][12] << endl;
+		load_biases("../JupyterExport/conv2d_bias.bin",biases_layer0);
+		load_biases("../JupyterExport/conv2d_1_bias.bin",biases_layer1);
+		load_biases("../JupyterExport/conv2d_2_bias.bin",biases_layer2);
+		load_biases("../JupyterExport/conv2d_3_bias.bin",biases_layer3);
+		load_biases("../JupyterExport/conv2d_4_bias.bin",biases_layer4);
+		load_biases("../JupyterExport/conv2d_5_bias.bin",biases_layer5);
 
-		// }
-
-		load_biases("../../Our_export/conv2d_bias.bin",biases_layer0);
-		load_biases("../../Our_export/conv2d_1_bias.bin",biases_layer1);
-		load_biases("../../Our_export/conv2d_2_bias.bin",biases_layer2);
-		load_biases("../../Our_export/conv2d_3_bias.bin",biases_layer3);
-		load_biases("../../Our_export/conv2d_4_bias.bin",biases_layer4);
-		load_biases("../../Our_export/conv2d_5_bias.bin",biases_layer5);
-
-		load_biases("../../Our_export/dense_bias.bin",biases_dense0);
-		load_biases("../../Our_export/dense_1_bias.bin",biases_dense1);
+		load_biases("../JupyterExport/dense_bias.bin",biases_dense0);
+		load_biases("../JupyterExport/dense_1_bias.bin",biases_dense1);
 		// Load the intermediate feature map data from binary files.
 		// First load the flattened array then reshape according to intermediate feature map dimensions.
 		float fmap_layer0[60][60][32];
@@ -103,22 +97,21 @@ int main()
 		float fmap_maxpool0[28][28][32];
 		float fmap_maxpool1[12][12][64];
 		float fmap_maxpool2[4][4][128];
-		cout << "weight " << "00 " << weights_dense1[0][0]<< endl;
 
 
-		load_intermediate_maps("../../Our_export/4conv2dintermediate.bin", fmap_layer0);
-		load_intermediate_maps("../../Our_export/4conv2d_1intermediate.bin", fmap_layer1);
-		load_intermediate_maps("../../Our_export/4conv2d_2intermediate.bin", fmap_layer2);
-		load_intermediate_maps("../../Our_export/4conv2d_3intermediate.bin", fmap_layer3);
-		load_intermediate_maps("../../Our_export/4conv2d_4intermediate.bin", fmap_layer4);
-		load_intermediate_maps("../../Our_export/4conv2d_5intermediate.bin", fmap_layer5);
+		load_intermediate_maps("../JupyterExport/4conv2dintermediate.bin", fmap_layer0);
+		load_intermediate_maps("../JupyterExport/4conv2d_1intermediate.bin", fmap_layer1);
+		load_intermediate_maps("../JupyterExport/4conv2d_2intermediate.bin", fmap_layer2);
+		load_intermediate_maps("../JupyterExport/4conv2d_3intermediate.bin", fmap_layer3);
+		load_intermediate_maps("../JupyterExport/4conv2d_4intermediate.bin", fmap_layer4);
+		load_intermediate_maps("../JupyterExport/4conv2d_5intermediate.bin", fmap_layer5);
 
-		load_intermediate_maps("../../Our_export/4denseintermediate.bin", fmap_dense0);
-		load_intermediate_maps("../../Our_export/4dense_1intermediate.bin", fmap_dense1);
+		load_intermediate_maps("../JupyterExport/4denseintermediate.bin", fmap_dense0);
+		load_intermediate_maps("../JupyterExport/4dense_1intermediate.bin", fmap_dense1);
 
-		load_intermediate_maps("../../Our_export/4max_pooling2dintermediate.bin", fmap_maxpool0);
-		load_intermediate_maps("../../Our_export/4max_pooling2d_1intermediate.bin", fmap_maxpool1);
-		load_intermediate_maps("../../Our_export/4max_pooling2d_2intermediate.bin", fmap_maxpool2);
+		load_intermediate_maps("../JupyterExport/4max_pooling2dintermediate.bin", fmap_maxpool0);
+		load_intermediate_maps("../JupyterExport/4max_pooling2d_1intermediate.bin", fmap_maxpool1);
+		load_intermediate_maps("../JupyterExport/4max_pooling2d_2intermediate.bin", fmap_maxpool2);
 		// Execute the inference code and validate against the imported inference output. 
 		// For each of the input, for all of the intermediate feature maps provide the binary files for both the imported feature maps from python (true value) and the ones predicted by your own C/C++ implementation.
 		// Were you able to get similar final classification probability as the python version executing? if not what was the difference.
@@ -136,13 +129,14 @@ int main()
 		float output_maxpool1[12][12][64];
 		float output_maxpool2[4][4][128];
 		float flatten[2048];
+
+		//Perform Inference
 		//First Conv2d
 		conv2d(input, weights_layer0, biases_layer0, (float * )output_layer0);
 		compareMatrix3d(output_layer0, fmap_layer0);
 		//Which goes into Conv2d_1
 		conv2d(output_layer0, weights_layer1, biases_layer1, (float *) output_layer1);
 		compareMatrix3d(output_layer1, fmap_layer1);
-		cout << "weight " << "00 " << weights_dense1[0][0]<< endl;
 
 		//Which goes into max pooling
 		maxPool2D(output_layer1, (float * )output_maxpool0);
@@ -175,4 +169,164 @@ int main()
 		cout << "MAX DIFF " <<comparemax1d(output_dense1, fmap_dense1) << endl;
 		compare1d(output_dense1, fmap_dense1);
 
+
+		// export binaries
+		export_binary(output_layer0, "../Input4C++Binary/fmap_4_conv2d.bin");
+		export_binary(output_layer1, "../Input4C++Binary/fmap_4_conv2d_1.bin");
+		export_binary(output_layer2, "../Input4C++Binary/fmap_4_conv2d_2.bin");
+		export_binary(output_layer3, "../Input4C++Binary/fmap_4_conv2d_3.bin");
+		export_binary(output_layer4, "../Input4C++Binary/fmap_4_conv2d_4.bin");
+		export_binary(output_layer5, "../Input4C++Binary/fmap_4_conv2d_5.bin");
+
+		export_binary(output_dense0, "../Input4C++Binary/fmap_4_dense.bin");
+		export_binary(output_dense1, "../Input4C++Binary/fmap_4_dense_1.bin");
+
+		export_binary(output_maxpool0, "../Input4C++Binary/fmap_4_max_pooling.bin");
+		export_binary(output_maxpool1, "../Input4C++Binary/fmap_4_max_pooling_1.bin");
+		export_binary(output_maxpool2, "../Input4C++Binary/fmap_4_max_pooling_2.bin");
+
+		//Now load the next input
+		load_input("../JupyterExport/input6.bin", input);
+
+		load_intermediate_maps("../JupyterExport/6conv2dintermediate.bin", fmap_layer0);
+		load_intermediate_maps("../JupyterExport/6conv2d_1intermediate.bin", fmap_layer1);
+		load_intermediate_maps("../JupyterExport/6conv2d_2intermediate.bin", fmap_layer2);
+		load_intermediate_maps("../JupyterExport/6conv2d_3intermediate.bin", fmap_layer3);
+		load_intermediate_maps("../JupyterExport/6conv2d_4intermediate.bin", fmap_layer4);
+		load_intermediate_maps("../JupyterExport/6conv2d_5intermediate.bin", fmap_layer5);
+
+		load_intermediate_maps("../JupyterExport/6denseintermediate.bin", fmap_dense0);
+		load_intermediate_maps("../JupyterExport/6dense_1intermediate.bin", fmap_dense1);
+
+		load_intermediate_maps("../JupyterExport/6max_pooling2dintermediate.bin", fmap_maxpool0);
+		load_intermediate_maps("../JupyterExport/6max_pooling2d_1intermediate.bin", fmap_maxpool1);
+		load_intermediate_maps("../JupyterExport/6max_pooling2d_2intermediate.bin", fmap_maxpool2);
+
+		//Perform Inference
+		//First Conv2d
+		conv2d(input, weights_layer0, biases_layer0, (float * )output_layer0);
+		compareMatrix3d(output_layer0, fmap_layer0);
+		//Which goes into Conv2d_1
+		conv2d(output_layer0, weights_layer1, biases_layer1, (float *) output_layer1);
+		compareMatrix3d(output_layer1, fmap_layer1);
+
+		//Which goes into max pooling
+		maxPool2D(output_layer1, (float * )output_maxpool0);
+		compareMatrix3d(output_maxpool0, fmap_maxpool0);
+		//Which goes into conv2d_2
+		conv2d(output_maxpool0, weights_layer2, biases_layer2, (float *) output_layer2);
+		compareMatrix3d(output_layer2, fmap_layer2);
+		//Which goes into conv2d_3
+		conv2d(output_layer2, weights_layer3, biases_layer3, (float *) output_layer3);
+		compareMatrix3d(output_layer3, fmap_layer3);
+		//which goes into max pooling 1
+		maxPool2D(output_layer3, (float * )output_maxpool1);
+		compareMatrix3d(output_maxpool1, fmap_maxpool1);
+		//Which goes into conv2d_4
+		conv2d(output_maxpool1, weights_layer4, biases_layer4, (float *) output_layer4);
+		compareMatrix3d(output_layer4, fmap_layer4);
+		//Which goes into conv2d_5
+		conv2d(output_layer4, weights_layer5, biases_layer5, (float *) output_layer5);
+		compareMatrix3d(output_layer5, fmap_layer5);
+		//which goes into the final max pooling 2
+		maxPool2D(output_layer5, (float * )output_maxpool2);
+		compareMatrix3d(output_maxpool2, fmap_maxpool2);
+		//which then is flattened and put through the 2 dense layers
+		memcpy(flatten, output_maxpool2, sizeof(float) * 2048);
+
+		denseRelu(flatten, weights_dense0, biases_dense0, (float * )output_dense0);
+		compare1d(output_dense0, fmap_dense0);
+		denseSoftmax(output_dense0, weights_dense1, biases_dense1, (float * )output_dense1);
+
+		cout << "MAX DIFF " <<comparemax1d(output_dense1, fmap_dense1) << endl;
+		compare1d(output_dense1, fmap_dense1);
+
+
+		// export binaries
+		export_binary(output_layer0, "../Input6C++Binary/fmap_6_conv2d.bin");
+		export_binary(output_layer1, "../Input6C++Binary/fmap_6_conv2d_1.bin");
+		export_binary(output_layer2, "../Input6C++Binary/fmap_6_conv2d_2.bin");
+		export_binary(output_layer3, "../Input6C++Binary/fmap_6_conv2d_3.bin");
+		export_binary(output_layer4, "../Input6C++Binary/fmap_6_conv2d_4.bin");
+		export_binary(output_layer5, "../Input6C++Binary/fmap_6_conv2d_5.bin");
+
+		export_binary(output_dense0, "../Input6C++Binary/fmap_6_dense.bin");
+		export_binary(output_dense1, "../Input6C++Binary/fmap_6_dense_1.bin");
+
+		export_binary(output_maxpool0, "../Input6C++Binary/fmap_6_max_pooling.bin");
+		export_binary(output_maxpool1, "../Input6C++Binary/fmap_6_max_pooling_1.bin");
+		export_binary(output_maxpool2, "../Input6C++Binary/fmap_6_max_pooling_2.bin");
+
+
+		//Now load the final input
+		load_input("../JupyterExport/input8.bin", input);
+
+		load_intermediate_maps("../JupyterExport/8conv2dintermediate.bin", fmap_layer0);
+		load_intermediate_maps("../JupyterExport/8conv2d_1intermediate.bin", fmap_layer1);
+		load_intermediate_maps("../JupyterExport/8conv2d_2intermediate.bin", fmap_layer2);
+		load_intermediate_maps("../JupyterExport/8conv2d_3intermediate.bin", fmap_layer3);
+		load_intermediate_maps("../JupyterExport/8conv2d_4intermediate.bin", fmap_layer4);
+		load_intermediate_maps("../JupyterExport/8conv2d_5intermediate.bin", fmap_layer5);
+
+		load_intermediate_maps("../JupyterExport/8denseintermediate.bin", fmap_dense0);
+		load_intermediate_maps("../JupyterExport/8dense_1intermediate.bin", fmap_dense1);
+
+		load_intermediate_maps("../JupyterExport/8max_pooling2dintermediate.bin", fmap_maxpool0);
+		load_intermediate_maps("../JupyterExport/8max_pooling2d_1intermediate.bin", fmap_maxpool1);
+		load_intermediate_maps("../JupyterExport/8max_pooling2d_2intermediate.bin", fmap_maxpool2);
+
+		//Perform Inference
+		//First Conv2d
+		conv2d(input, weights_layer0, biases_layer0, (float * )output_layer0);
+		compareMatrix3d(output_layer0, fmap_layer0);
+		//Which goes into Conv2d_1
+		conv2d(output_layer0, weights_layer1, biases_layer1, (float *) output_layer1);
+		compareMatrix3d(output_layer1, fmap_layer1);
+
+		//Which goes into max pooling
+		maxPool2D(output_layer1, (float * )output_maxpool0);
+		compareMatrix3d(output_maxpool0, fmap_maxpool0);
+		//Which goes into conv2d_2
+		conv2d(output_maxpool0, weights_layer2, biases_layer2, (float *) output_layer2);
+		compareMatrix3d(output_layer2, fmap_layer2);
+		//Which goes into conv2d_3
+		conv2d(output_layer2, weights_layer3, biases_layer3, (float *) output_layer3);
+		compareMatrix3d(output_layer3, fmap_layer3);
+		//which goes into max pooling 1
+		maxPool2D(output_layer3, (float * )output_maxpool1);
+		compareMatrix3d(output_maxpool1, fmap_maxpool1);
+		//Which goes into conv2d_4
+		conv2d(output_maxpool1, weights_layer4, biases_layer4, (float *) output_layer4);
+		compareMatrix3d(output_layer4, fmap_layer4);
+		//Which goes into conv2d_5
+		conv2d(output_layer4, weights_layer5, biases_layer5, (float *) output_layer5);
+		compareMatrix3d(output_layer5, fmap_layer5);
+		//which goes into the final max pooling 2
+		maxPool2D(output_layer5, (float * )output_maxpool2);
+		compareMatrix3d(output_maxpool2, fmap_maxpool2);
+		//which then is flattened and put through the 2 dense layers
+		memcpy(flatten, output_maxpool2, sizeof(float) * 2048);
+
+		denseRelu(flatten, weights_dense0, biases_dense0, (float * )output_dense0);
+		compare1d(output_dense0, fmap_dense0);
+		denseSoftmax(output_dense0, weights_dense1, biases_dense1, (float * )output_dense1);
+
+		cout << "MAX DIFF " <<comparemax1d(output_dense1, fmap_dense1) << endl;
+		compare1d(output_dense1, fmap_dense1);
+
+
+		// export binaries
+		export_binary(output_layer0, "../Input8C++Binary/fmap_8_conv2d.bin");
+		export_binary(output_layer1, "../Input8C++Binary/fmap_8_conv2d_1.bin");
+		export_binary(output_layer2, "../Input8C++Binary/fmap_8_conv2d_2.bin");
+		export_binary(output_layer3, "../Input8C++Binary/fmap_8_conv2d_3.bin");
+		export_binary(output_layer4, "../Input8C++Binary/fmap_8_conv2d_4.bin");
+		export_binary(output_layer5, "../Input8C++Binary/fmap_8_conv2d_5.bin");
+
+		export_binary(output_dense0, "../Input8C++Binary/fmap_8_dense.bin");
+		export_binary(output_dense1, "../Input6C++Binary/fmap_8_dense_1.bin");
+
+		export_binary(output_maxpool0, "../Input8C++Binary/fmap_8_max_pooling.bin");
+		export_binary(output_maxpool1, "../Input8C++Binary/fmap_8_max_pooling_1.bin");
+		export_binary(output_maxpool2, "../Input8C++Binary/fmap_8_max_pooling_2.bin");
 }
