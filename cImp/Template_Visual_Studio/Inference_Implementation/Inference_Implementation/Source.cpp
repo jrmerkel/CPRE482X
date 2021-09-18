@@ -1,11 +1,12 @@
 #include "source.h"
 #include "conv2d.h"
 #include "maxpool2d.h"
+#include "dense.h"
+
 // Implement the layers as functions
 
 
 int main()
-
 {
 	// Do this for all the three chosen inputs:
 
@@ -53,10 +54,10 @@ int main()
 		float biases_layer4[64];
 
 		float weights_layer5[3][3][64][128];
-		float biases_layer5[64];
+		float biases_layer5[128];
 
 		float weights_dense0[2048][256];
-		float biases_dense0[64];
+		float biases_dense0[256];
 
 		float weights_dense1[256][200];
 		float biases_dense1[200];
@@ -69,8 +70,13 @@ int main()
 		load_weights("../../Our_export/conv2d_5_weights.bin", weights_layer5);
 
 		load_weights("../../Our_export/dense_weights.bin", weights_dense0);
-		load_weights("../../Our_export/dense_1_weights.bin", weights_dense1);
 
+		cout << "weight " << "00 " << weights_dense1[0][0]<< endl;
+		// for(int i = 0; i < 256; i++)
+		// {
+		// 	 cout << "weight " << i << " " << weights_dense1[i][12] << endl;
+
+		// }
 
 		load_biases("../../Our_export/conv2d_bias.bin",biases_layer0);
 		load_biases("../../Our_export/conv2d_1_bias.bin",biases_layer1);
@@ -79,8 +85,8 @@ int main()
 		load_biases("../../Our_export/conv2d_4_bias.bin",biases_layer4);
 		load_biases("../../Our_export/conv2d_5_bias.bin",biases_layer5);
 
-		load_biases("../../Our_export/conv2d_4_bias.bin",biases_dense0);
-		load_biases("../../Our_export/conv2d_5_bias.bin",biases_dense1);
+		load_biases("../../Our_export/dense_bias.bin",biases_dense0);
+		load_biases("../../Our_export/dense_1_bias.bin",biases_dense1);
 		// Load the intermediate feature map data from binary files.
 		// First load the flattened array then reshape according to intermediate feature map dimensions.
 		float fmap_layer0[60][60][32];
@@ -96,6 +102,7 @@ int main()
 		float fmap_maxpool0[28][28][32];
 		float fmap_maxpool1[12][12][64];
 		float fmap_maxpool2[4][4][128];
+		cout << "weight " << "00 " << weights_dense1[0][0]<< endl;
 
 
 		load_intermediate_maps("../../Our_export/4conv2dintermediate.bin", fmap_layer0);
@@ -127,34 +134,54 @@ int main()
 		float output_maxpool0[28][28][32];
 		float output_maxpool1[12][12][64];
 		float output_maxpool2[4][4][128];
-
+		float flatten[2048];
 		//First Conv2d
 		conv2d(input, weights_layer0, biases_layer0, (float * )output_layer0);
 		compareMatrix3d(output_layer0, fmap_layer0);
 		//Which goes into Conv2d_1
 		conv2d(output_layer0, weights_layer1, biases_layer1, (float *) output_layer1);
 		compareMatrix3d(output_layer1, fmap_layer1);
+		cout << "weight " << "00 " << weights_dense1[0][0]<< endl;
+
 		//Which goes into max pooling
 		maxPool2D(output_layer1, (float * )output_maxpool0);
 		compareMatrix3d(output_maxpool0, fmap_maxpool0);
-}
+		//Which goes into conv2d_2
+		conv2d(output_maxpool0, weights_layer2, biases_layer2, (float *) output_layer2);
+		compareMatrix3d(output_layer2, fmap_layer2);
+		//Which goes into conv2d_3
+		conv2d(output_layer2, weights_layer3, biases_layer3, (float *) output_layer3);
+		compareMatrix3d(output_layer3, fmap_layer3);
+		//which goes into max pooling 1
+		maxPool2D(output_layer3, (float * )output_maxpool1);
+		compareMatrix3d(output_maxpool1, fmap_maxpool1);
+		//Which goes into conv2d_4
+		conv2d(output_maxpool1, weights_layer4, biases_layer4, (float *) output_layer4);
+		compareMatrix3d(output_layer4, fmap_layer4);
+		//Which goes into conv2d_5
+		conv2d(output_layer4, weights_layer5, biases_layer5, (float *) output_layer5);
+		compareMatrix3d(output_layer5, fmap_layer5);
+		//which goes into the final max pooling 2
+		maxPool2D(output_layer5, (float * )output_maxpool2);
+		compareMatrix3d(output_maxpool2, fmap_maxpool2);
+		//which then is flattened and put through the 2 dense layers
+		memcpy(flatten, output_maxpool2, sizeof(float) * 2048);
+		// float flatten_actual[2048];
+		// load_intermediate_maps("../../Our_export/4flattenintermediate.bin", flatten_actual);
+		cout << "weight before other r " << "00 " << weights_dense1[0][0]<< endl;
 
-/**
- * Dense layer should be arrays
- */
-void dense(float * input_arr, float * output_arr, float * weight_matrix, float * biases, int input_size, int output_size)
-{
-	for(int i = 0; i < output_size; i++)
-	{
-		*(output_arr + i) = 0;
-		for(int j = 0; j < input_size; j++)
-		{
-			*(output_arr + i) += *(input_arr + j) * *(weight_matrix + j + input_size * i);
-		}
-		//activation function (RELU?) TODO maybe add sigmoid case?
-		if(*(output_arr + i) < 0) 
-		{
-			*(output_arr + i) = 0;
-		}
-	}
+		denseRelu(flatten, weights_dense0, biases_dense0, (float * )output_dense0);
+		cout << "weight after r " << "00 " << weights_dense1[0][0]<< endl;
+		//reload weights
+		load_weights("../../Our_export/test2.bin", weights_dense1);
+		cout << "weight after reload " << "00 " << weights_dense1[0][0]<< endl;
+		compare1d(output_dense0, fmap_dense0);
+		cout << "weight " << "00 " << weights_dense1[0][0]<< endl;
+
+		denseSoftmax(output_dense0, weights_dense1, biases_dense1, (float * )output_dense1);
+		cout << "weight " << "00 " << weights_dense1[0][0]<< endl;
+		
+		cout << "MAX DIFF " <<comparemax1d(output_dense1, fmap_dense1) << endl;
+		compare1d(output_dense1, fmap_dense1);
+
 }

@@ -1,7 +1,8 @@
 #pragma once
 template<int w, int h, int c>
 //Pooling is 2x2
-void maxPool2D(float (&input_tensor)[w][h][c], float * output_tensor) {
+void maxPool2D(float (&input_tensor)[w][h][c], float * output_tensor) 
+{
 //input terms
 	//calculate P and Q which is the resulting size (we are using U = 2 this time)
     int U = 2; // incase this ever changes

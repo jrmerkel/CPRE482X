@@ -1,6 +1,7 @@
 #pragma once
 template<int w, int h, int c, int s, int r, int m>
-void conv2d(float (&input_tensor)[w][h][c], float (&weights)[s][r][c][m], float (&biases)[m], float * output_tensor) {
+void conv2d(float (&input_tensor)[w][h][c], float (&weights)[s][r][c][m], float (&biases)[m], float * output_tensor) 
+{
 
 	//calculate P and Q which is the resulting size (we are using U = 1)
 	int p = h - r + 1;

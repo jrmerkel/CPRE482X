@@ -8,7 +8,7 @@
 using namespace std;
 
 #define TOLERANCE 0.00001f
-
+#define SOFTMAXTOLERANCE 0.01f
 
 //Should've done loads as 1d, 2d etc but that's a stretch goal
 template<int N, int C>
@@ -103,6 +103,7 @@ bool compareMatrix3d(float (&MatrixA)[x][y][z], float (&MatrixB)[x][y][z])
             {
                 if(abs(MatrixA[i][j][k] - MatrixB[i][j][k]) > TOLERANCE)
                 {
+                    cout << "!!!!!!!!!MISMATCH!!!!!!!!" << endl;
                     return false;
                 }
             }
@@ -114,4 +115,57 @@ bool compareMatrix3d(float (&MatrixA)[x][y][z], float (&MatrixB)[x][y][z])
     return true;
 }
 
-void dense(float * input_arr, float * output_arr, float * weight_matrix, float * biases, int input_size, int output_size);
+template<int x>
+bool compare1d(float (&arrA)[x], float (&arrB)[x])
+{
+    for (int i = 0; i < x; i++)
+    {
+        if(abs(arrA[i] - arrB[i]) > TOLERANCE)
+        {
+            cout << i << " " << arrA[i] << " " << arrB[i] << endl;
+            cout << "!!!!!!!!!MISMATCH!!!!!!!!" << endl;
+            return false;
+        }
+    }
+    cout << "Arrays match" << endl;
+    return true;
+}
+template<int x>
+bool compare1dsoftmax(float (&arrA)[x], float (&arrB)[x])
+{
+    for (int i = 0; i < x; i++)
+    {
+        if(abs(arrA[i] - arrB[i]) > SOFTMAXTOLERANCE)
+        {
+            cout << i << " " << arrA[i] << " " << arrB[i] << endl;
+            cout << "!!!!!!!!!MISMATCH!!!!!!!!" << endl;
+            return false;
+        }
+    }
+    cout << "Arrays match" << endl;
+    return true;
+}
+
+template<int N>
+// Parameters: N: compares two 1d arrays of size N and returns the maximum difference
+float comparemax1d(float (&Input1)[N], float (&Input2)[N]) {
+    // display the maximum diff
+    double max_diff = 0;
+    double curr_diff = 0;
+    int index = 0;
+    for (int i = 0; i < N; i++) {
+       
+                curr_diff = abs(Input1[i] - Input2[i]);
+                if (curr_diff > max_diff) {
+                    max_diff = curr_diff;
+                    index = i;
+                }
+
+
+      
+    }
+    cout << "index " << index << endl;
+    cout << "expected " << Input1[index] << " actual " << Input2[index] << endl;
+    return max_diff;
+
+}
