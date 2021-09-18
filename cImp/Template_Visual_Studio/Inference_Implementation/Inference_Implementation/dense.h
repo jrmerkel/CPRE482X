@@ -22,7 +22,7 @@ void denseRelu(float (&input_arr)[X], float (&weights)[X][W], float (&biases)[W]
     }
     
 	//copy stack array into output tensor pointer
-	memcpy(output, output_arr, sizeof(float) * X * W);
+	memcpy(output, output_arr, sizeof(float) * W);
 }
 
 template<int X, int W>
@@ -58,5 +58,5 @@ void denseSoftmax(float (&input_arr)[X], float (&weightsSM)[X][W], float (&biase
         post_softmax[i] = exp(output_arr[i])/ denominator;
     }
 	//copy stack array into output tensor pointer
-	memcpy(output, post_softmax, sizeof(float) * X * W);
+	memcpy(output, post_softmax, sizeof(float) * W);
 }
