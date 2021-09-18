@@ -47,29 +47,15 @@ void denseSoftmax(float (&input_arr)[X], float (&weightsSM)[X][W], float (&biase
     }
     float post_softmax[W];
     float denominator = 0.0;
-   
-    float max = output_arr[0];
-    cout << "max " << max << endl;
-    //Now that we have all of the values we calc the denominator of softmax
+
     for (int i = 0; i < W; i++)
     {
-        if(max < output_arr[i])
-        {
-            max = output_arr[i];
-        }
+        denominator += exp(output_arr[i]);
     }
-    cout << "max " << max << endl;
-    for (int i = 0; i < W; i++)
-    {
-        denominator += exp(output_arr[i] - max);
-    }
-    cout << "denominator " << denominator << endl;
-    float constant = max + log(denominator);
-    cout << "offset " << constant << endl;
     //now we calc the actual outputs
     for (int i = 0; i < W; i++)
     {
-        post_softmax[i] = exp(output_arr[i] - constant);
+        post_softmax[i] = exp(output_arr[i])/ denominator;
     }
 	//copy stack array into output tensor pointer
 	memcpy(output, post_softmax, sizeof(float) * X * W);
