@@ -1,5 +1,5 @@
 #include "source.h"
-#include "conv2d.h"
+#include "conv2d_pthread.h"
 #include "maxpool2d.h"
 #include "dense.h"
 

@@ -1,0 +1,29 @@
+3.2
+real	0m3.011s
+user	0m2.902s
+sys	0m0.010s
+3.3
+perf.data in the folder
+3.4
+1. (divide time by 3 for 3.2)
+2. Use this
+60.08%  source   source                        [.] conv2d<60, 60, 32, 5, 5, 3◆
+  16.84%  source   source                        [.] conv2d<26, 26, 64, 3, 3, 6▒
+   9.59%  source   source                        [.] conv2d<28, 28, 32, 3, 3, 6▒
+   6.23%  source   source                        [.] conv2d<64, 64, 3, 5, 5, 32▒
+   3.63%  source   source                        [.] conv2d<10, 10, 64, 3, 3, 1▒
+   2.80%  source   source                        [.] conv2d<12, 12, 64, 3, 3, 6▒
+   0.42%  source   source                        [.] denseRelu<2048, 256>      ▒
+   0.08%  source   source                        [.] maxPool2D<56, 56, 32>     ▒
+   0.06%  source   source                        [.] compareMatrix3d<60, 60, 32▒
+   0.05%  source   source                        [.] compareMatrix3d<56, 56, 32▒
+   0.03%  source   source                        [.] denseSoftmax<256, 200>    ▒
+   0.03%  source   source                        [.] maxPool2D<24, 24, 64>     ▒
+   0.02%  source   source                        [.] compareMatrix3d<26, 26, 64▒
+   0.02%  source   libc-2.17.so                  [.] __memcpy_ssse3_back       ▒
+   0.02%  source   source                        [.] compareMatrix3d<24, 24, 64▒
+   0.01%  source   source                        [.] compareMatrix3d<28, 28, 32▒
+   0.01%  source   ld-2.17.so                    [.] _dl_relocate_object       ▒
+   0.01%  source   source                        [.] maxPool2D<8, 8, 128>      
+The reason why is time complexity
+3.5
