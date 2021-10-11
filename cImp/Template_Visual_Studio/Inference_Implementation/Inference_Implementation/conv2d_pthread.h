@@ -17,6 +17,7 @@ struct arg_struct
 	int m;
 	int p;
 	int q;
+	int id;
 };
 
 template<int w, int h, int c, int s, int r, int m>
@@ -28,20 +29,11 @@ void conv2d(float (&input_tensor)[w][h][c], float (&weights)[s][r][c][m], float 
 	//float (&output_tensor_arrform)[p,q,m] = (float*) malloc(m * p * q * sizeof(float));
 	float matrix_output[p][q][m];
 	g_matrix_output = (float *) matrix_output;
-    cout << "matrix output dim " << p << q << m << endl;
+    //cout << "matrix output dim " << p << q << m << endl;
 
 	pthread_t threads[NUM_THREADS];
 
-	arg_struct args;
-
-	args.w = w;
-	args.h = h;
-	args.c = c;
-	args.s = s;
-	args.r = r;
-	args.m = m;
-	args.p = p;
-	args.q = q;
+	arg_struct args[NUM_THREADS];
 
 	g_input_tensor = (float *)input_tensor;
 	g_weights = (float *)weights;
@@ -49,10 +41,24 @@ void conv2d(float (&input_tensor)[w][h][c], float (&weights)[s][r][c][m], float 
 
 	for(int i = 0; i < NUM_THREADS; i++)
 	{
-		pthread_create(&threads[i], NULL, thread_subroutine, (void *) &args);
+		
+		args[i].w = w;
+		args[i].h = h;
+		args[i].c = c;
+		args[i].s = s;
+		args[i].r = r;
+		args[i].m = m;
+		args[i].p = p;
+		args[i].q = q;
+		args[i].id = i;
+		pthread_create(&threads[i], NULL, thread_subroutine, (void *) &args[i]);
+		//cout << threads[i] << endl;
 	}
 
-
+	for(int i = 0; i < NUM_THREADS; i++)
+	{
+		pthread_join(threads[i], NULL);
+	}
 
 
 	//copy stack array into output tensor pointer
@@ -61,19 +67,23 @@ void conv2d(float (&input_tensor)[w][h][c], float (&weights)[s][r][c][m], float 
 
 void * thread_subroutine(void* arg)
 {
+	//cout << "HERE " << endl;
 	arg_struct * dims = (arg_struct *) arg;
+	float (*t_matrix_output)[dims->p][dims->q][dims->m]  = (float (*)[dims->p][dims->q][dims->m]) (g_matrix_output);
 
-	float t_matrix_output
+	float (*t_input_tensor)[dims->w][dims->h][dims->c]  = (float (*)[dims->w][dims->h][dims->c]) g_input_tensor;
+	float (*t_weights)[dims->s][dims->r][dims->c][dims->m]  = (float (*)[dims->s][dims->r][dims->c][dims->m]) g_weights;
+	int id = dims->id;
 	// o[n][m][p][q] = sumc sum r sums i[n][c][p+r][q+s] * f[m][c][r][s] + b[m]
 	//where n = 1
-    //TODO stretch Fix the loop orderings but don't touch atm it works LMAO
-	for(int x = 0; x < dims->m; x++) ///////////////////////////////m = x
+	for(int x = (dims->m / NUM_THREADS) * id ; x < (dims->m / NUM_THREADS) * (id + 1); x++) ///////////////////////////////m = x
 	{
 		for(int y = 0; y < dims->p; y++)////////////////////////////p = y
 		{
 			for(int z = 0; z < dims->q; z++)////////////////////////q = z
 			{
-				((float [dims->p][dims->q][dims->m])g_matrix_output)[z][y][x]  = 0;
+				//cout << &(*t_matrix_output)[z][y][x] << endl;
+				(*t_matrix_output)[z][y][x]  = 0;
 				for(int i = 0; i < dims->c; i++)////////////////////c = i
 				{
 					for(int j = 0; j < dims->r; j++)////////////////r = j
@@ -83,18 +93,19 @@ void * thread_subroutine(void* arg)
 							//matrix[m][p][q] = i[c][p + r][q + s] * f[m][c][r][s]
                             //Ours is not in this exact order
                             //Ours is matrix[m][p][q] = i[q + s][p+r][c] * f[s][r][c][m]
-                            //matrix_output[z][y][x] +=  input_tensor[z + k][y+j][i] * weights[k][j][i][x];
+							(*t_matrix_output)[z][y][x] +=  (*t_input_tensor)[z + k][y+j][i] * (*t_weights)[k][j][i][x];
                         }
 					}
 				}
 				//Add bias
-				//matrix_output[z][y][x]   += biases[x];
+				(*t_matrix_output)[z][y][x]   += g_biases[x];
 				//activation function relu if negative then 0
-				// if(matrix_output[z][y][x]  < 0)
-				// {
-				// 	matrix_output[z][y][x]   = 0;
-				// } 
+				if((*t_matrix_output)[z][y][x]  < 0)
+				{
+					(*t_matrix_output)[z][y][x]   = 0;
+				} 
 			}
 		}
 	}
+	return NULL;
 }
