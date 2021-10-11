@@ -11,7 +11,7 @@ void conv2d(float (&input_tensor)[w][h][c], float (&weights)[s][r][c][m], float 
     //cout << "matrix output dim " << p << q << m << endl;
 	// o[n][m][p][q] = sumc sum r sums i[n][c][p+r][q+s] * f[m][c][r][s] + b[m]
 	//where n = 1
-    //TODO stretch Fix the loop orderings but don't touch atm it works LMAO
+    
 	for(int z = 0; z < q; z++) ///////////////////////////////m = x
 	{
 		for(int y = 0; y < p; y++)////////////////////////////p = y
@@ -19,11 +19,11 @@ void conv2d(float (&input_tensor)[w][h][c], float (&weights)[s][r][c][m], float 
 			for(int x = 0; x < m; x++)////////////////////////q = z
 			{
 				matrix_output[z][y][x]  = 0;
-				for(int i = 0; i < c; i++)////////////////////c = i
+				for(int k = 0; k < s; k++)////////////////////c = i
 				{
 					for(int j = 0; j < r; j++)////////////////r = j
 					{
-						for(int k = 0; k < s; k++)////////////s = k
+						for(int i = 0; i < c; i++)////////////s = k
 						{
 							//matrix[m][p][q] = i[c][p + r][q + s] * f[m][c][r][s]
                             //Ours is not in this exact order
