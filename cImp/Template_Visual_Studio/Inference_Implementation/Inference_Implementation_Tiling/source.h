@@ -18,7 +18,7 @@ void load_input(string filename, float out[N][N][C])
 	if(ptr_weights!=NULL)
 	{
 		int r2 = fread(out, sizeof(float), (N*N*C), ptr_weights);
-		printf("Read input values: %d\n", r2);
+		//printf("Read input values: %d\n", r2);
 	}
 	fclose(ptr_weights);
 }
@@ -31,7 +31,7 @@ void load_weights(string filename, float (&weights)[s][r][c][m])
 	if(ptr_weights!=NULL)
 	{
 		int r2 = fread(weights, sizeof(float), (s*r*c*m), ptr_weights);
-		printf("Read weight values: %d\n", r2);
+		//printf("Read weight values: %d\n", r2);
 	}
 	fclose(ptr_weights);
 }
@@ -44,7 +44,7 @@ void load_weights(string filename, float (&weights)[x][y])
 	if(ptr_weights!=NULL)
 	{
 		int r2 = fread(weights, sizeof(float), (x*y), ptr_weights);
-		printf("Read weight values: %d\n", r2);
+		//printf("Read weight values: %d\n", r2);
 	}
 	fclose(ptr_weights);
 }
@@ -57,7 +57,7 @@ void load_biases(string filename, float (&biases)[len])
 	if(ptr_weights!=NULL)
 	{
 		int r2 = fread(biases, sizeof(float), len, ptr_weights);
-		printf("Read biases values: %d\n", r2);
+		//printf("Read biases values: %d\n", r2);
 	}
 	fclose(ptr_weights);
 }
@@ -71,7 +71,7 @@ void load_intermediate_maps(string filename, float (&ifmap)[X][Y][Z])
 	if(ptr_weights!=NULL)
 	{
 		int r2 = fread(ifmap, sizeof(float), (X*Y*Z), ptr_weights);
-		printf("Read fmap values: %d\n", r2);
+		//printf("Read fmap values: %d\n", r2);
 	}
 	fclose(ptr_weights);
 }
@@ -84,7 +84,7 @@ void load_intermediate_maps(string filename, float (&ifmap)[X])
 	if(ptr_weights!=NULL)
 	{
 		int r2 = fread(ifmap, sizeof(float), (X), ptr_weights);
-		printf("Read fmap values: %d\n", r2);
+		//printf("Read fmap values: %d\n", r2);
 	}
 	fclose(ptr_weights);
 }

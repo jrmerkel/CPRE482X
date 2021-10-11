@@ -33,3 +33,8 @@ L1 Instruction cahce = 32K
 L2 = 1024K
 L3 = 25344K
 2.
+reorderd loop 100
+real	1m36.618s
+user	1m36.185s
+sys	0m0.414s
+

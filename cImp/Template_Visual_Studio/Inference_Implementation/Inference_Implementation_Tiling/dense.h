@@ -4,7 +4,7 @@ template<int X, int W>
 void denseRelu(float (&input_arr)[X], float (&weights)[X][W], float (&biases)[W], float * output) 
 {
     float output_arr [W];
-    cout << "dense arr " << W << " " << X << endl;
+    //cout << "dense arr " << W << " " << X << endl;
     for (int i = 0; i < W; i++)
     {
         //Add bias
@@ -29,7 +29,7 @@ template<int X, int W>
 void denseSoftmax(float (&input_arr)[X], float (&weightsSM)[X][W], float (&biases)[W], float * output) 
 {
     float output_arr [W];
-    cout << "dense arr " << W << endl;
+    //cout << "dense arr " << W << endl;
     for (int i = 0; i < W; i++)
     {
         //cout << "bias " << i << " " << biases[i] << endl;
