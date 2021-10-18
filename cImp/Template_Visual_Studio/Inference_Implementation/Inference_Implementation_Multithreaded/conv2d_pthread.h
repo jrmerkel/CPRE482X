@@ -1,6 +1,6 @@
 #pragma once
 
-#define NUM_THREADS 2
+#define NUM_THREADS 32
 
 float * g_input_tensor;
 float * g_weights;
@@ -76,7 +76,7 @@ void * thread_subroutine(void* arg)
 	int id = dims->id;
 	// o[n][m][p][q] = sumc sum r sums i[n][c][p+r][q+s] * f[m][c][r][s] + b[m]
 	//where n = 1
-	for(int x = (dims->m / NUM_THREADS) * id ; x < (dims->m / NUM_THREADS) * (id + 1); x++) ///////////////////////////////m = x
+	for(int x = (id*dims->m / NUM_THREADS); x < ((id+1)*dims->m / NUM_THREADS); x++) ///////////////////////////////m = x
 	{
 		for(int y = 0; y < dims->p; y++)////////////////////////////p = y
 		{

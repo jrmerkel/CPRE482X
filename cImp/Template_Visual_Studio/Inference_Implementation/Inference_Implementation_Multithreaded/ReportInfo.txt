@@ -2,6 +2,10 @@
 real	0m3.011s
 user	0m2.902s
 sys	0m0.010s
+(1 inference) real	0m1.569s
+user	0m1.561s
+sys	0m0.006s
+
 3.3
 perf.data in the folder
 3.4
@@ -27,9 +31,49 @@ perf.data in the folder
    0.01%  source   source                        [.] maxPool2D<8, 8, 128>      
 The reason why is time complexity
 3.5
+1. All of these times are recorded for only one inference and should be compared the baseline (1 inference)
+  - 2 threads:real	0m0.833s
+user	0m1.588s
+sys	0m0.012s
+
+  - 4 threads:real	0m0.430s
+user	0m1.588s
+sys	0m0.004s
+
+  - 8 threads:real	0m0.456s
+user	0m1.564s
+sys	0m0.013s
+
+  - 16 threads:real	0m0.444s
+user	0m1.563s
+sys	0m0.012s
+
+  - 32 threads:real	0m0.424s
+user	0m1.554s
+sys	0m0.009s
+
+2. The plot of inference latency over number of plots is inside of the Inference_Implementation_Multithreaded folder.
+The observed optimal number of threads is 4 because the speed up gains aren't significant after that. After running the command lscpu, we observed
+that we only have 4 cpu threads available through our VDI, which explains how the speedup isn't significant for more threads. For more than 4 threads,
+the overhead of implementing and scheduling the different threads on the 4 logical CPU threads is not worth it and does not correspond to performance gains.
+3. All of the observed inference times using tensorboard were lower than the lowest inference time for a signle inference from our multithreaded C++ implementaiton.
+The reason for this could be because tensorflow uses many optimization techniques both for training and inference, such as cache tiling, quantization, multithreading,
+and others. Since we only use one optimization technique, multithreading, the inference time for our implementation is significantly larger.
+
+
+
+
+
 3.6
 1. L1 data = 32K
 L1 Instruction cahce = 32K
 L2 = 1024K
 L3 = 25344K
 2.
+
+
+3.7 quantization
+1. From the model.summary() function from TensorFlow, we know we have 770,216 parameters total, across all layers.
+For 32-bit float, the total size will be 24,646,912 bits, or 3,080,864 bytes (3MB)
+For 8-bit int, the total size will be 6,161,728 bits, or 770,216 bytes (770kB)
+For 2-bit int, the total size will be 1,540,432 bits, or 192,554 bytes (192kB)
