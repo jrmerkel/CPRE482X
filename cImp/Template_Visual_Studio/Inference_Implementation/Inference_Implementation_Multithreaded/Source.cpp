@@ -2,6 +2,7 @@
 #include "conv2d_pthread.h"
 #include "maxpool2d.h"
 #include "dense.h"
+//#include <chrono>
 
 // Implement the layers as functions
 
@@ -132,6 +133,9 @@ int main()
 
 		//Perform Inference
 		//First Conv2d
+		//time start
+		//auto start = std::chrono::system_clock::now();
+
 		conv2d(input, weights_layer0, biases_layer0, (float * )output_layer0);
 		compareMatrix3d(output_layer0, fmap_layer0);
 		//Which goes into Conv2d_1
@@ -168,10 +172,13 @@ int main()
 
 		cout << "MAX DIFF " <<comparemax1d(output_dense1, fmap_dense1) << endl;
 		compare1d(output_dense1, fmap_dense1);
-
+}
+		//time end here
+		//auto end = std::chrono::system_clock::now();
+		//std::cout << "elapsed time: " << (end-start);
 
 		// export binaries
-		export_binary(output_layer0, "../Input4C++Binary/fmap_4_conv2d.bin");
+		/*export_binary(output_layer0, "../Input4C++Binary/fmap_4_conv2d.bin");
 		export_binary(output_layer1, "../Input4C++Binary/fmap_4_conv2d_1.bin");
 		export_binary(output_layer2, "../Input4C++Binary/fmap_4_conv2d_2.bin");
 		export_binary(output_layer3, "../Input4C++Binary/fmap_4_conv2d_3.bin");
@@ -204,6 +211,7 @@ int main()
 
 		//Perform Inference
 		//First Conv2d
+
 		conv2d(input, weights_layer0, biases_layer0, (float * )output_layer0);
 		compareMatrix3d(output_layer0, fmap_layer0);
 		//Which goes into Conv2d_1
@@ -329,4 +337,4 @@ int main()
 		export_binary(output_maxpool0, "../Input8C++Binary/fmap_8_max_pooling.bin");
 		export_binary(output_maxpool1, "../Input8C++Binary/fmap_8_max_pooling_1.bin");
 		export_binary(output_maxpool2, "../Input8C++Binary/fmap_8_max_pooling_2.bin");
-}
+}*/
