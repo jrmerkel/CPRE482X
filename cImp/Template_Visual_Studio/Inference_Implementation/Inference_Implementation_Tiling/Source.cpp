@@ -142,23 +142,27 @@ int main()
 		//compareMatrix3d(output_layer3, fmap_layer3);
 		//which goes into max pooling 1
 		maxPool2D(output_layer3, (float * )output_maxpool1);
-		//compareMatrix3d(output_maxpool1, fmap_maxpool1);
+		// compareMatrix3d(output_maxpool1, fmap_maxpool1);
 		//Which goes into conv2d_4
 		conv2d(output_maxpool1, weights_layer4, biases_layer4, (float *) output_layer4);
-		//compareMatrix3d(output_layer4, fmap_layer4);
+		// compareMatrix3d(output_layer4, fmap_layer4);
 		//Which goes into conv2d_5
 		conv2d(output_layer4, weights_layer5, biases_layer5, (float *) output_layer5);
 		//compareMatrix3d(output_layer5, fmap_layer5);
 		//which goes into the final max pooling 2
 		maxPool2D(output_layer5, (float * )output_maxpool2);
-		//compareMatrix3d(output_maxpool2, fmap_maxpool2);
+		// compareMatrix3d(output_maxpool2, fmap_maxpool2);
 		//which then is flattened and put through the 2 dense layers
 		memcpy(flatten, output_maxpool2, sizeof(float) * 2048);
 
 		denseRelu(flatten, weights_dense0, biases_dense0, (float * )output_dense0);
-		//compare1d(output_dense0, fmap_dense0);
+		// compare1d(output_dense0, fmap_dense0);
+		// cout << fmap_dense1[0] << " " << output_dense1[0] << endl;
+		//cout << compare1d(output_dense1, fmap_dense1) << endl;
+		//comparemax1d(output_dense1, fmap_dense1);
 		denseSoftmax(output_dense0, weights_dense1, biases_dense1, (float * )output_dense1);
 
 		
-		//compare1d(output_dense1, fmap_dense1);
+		// compare1d(output_dense1, fmap_dense1);
+		// comparemax1d(output_dense1, fmap_dense1);
 }

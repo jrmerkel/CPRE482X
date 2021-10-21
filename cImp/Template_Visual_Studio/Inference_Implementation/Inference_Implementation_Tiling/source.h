@@ -4,6 +4,7 @@
 #include<string>
 #include<iostream>
 #include <cstring>
+#include <cmath>
 
 using namespace std;
 
@@ -119,7 +120,9 @@ bool compare1d(float (&arrA)[x], float (&arrB)[x])
 {
     for (int i = 0; i < x; i++)
     {
-        if(abs(arrA[i] - arrB[i]) > TOLERANCE)
+		// cout << arrA[i] << " " << arrB[i] << endl;
+		// cout << abs(arrA[i] - arrB[i]) << endl;
+        if(fabs(arrA[i] - arrB[i]) > TOLERANCE)
         {
             cout << i << " " << arrA[i] << " " << arrB[i] << endl;
             cout << "!!!!!!!!!MISMATCH!!!!!!!!" << endl;

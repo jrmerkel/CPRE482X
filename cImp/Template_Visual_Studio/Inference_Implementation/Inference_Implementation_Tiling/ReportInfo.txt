@@ -43,7 +43,24 @@ real	1m36.865s
 user	1m36.353s
 sys	0m0.475s
 3.
+batch_2
+real	1m31.166s
+user	1m30.487s
+sys	0m0.647s
+batch_4
+real	1m30.498s
+user	1m29.842s
+sys	0m0.633s
+batch_8
+real	1m30.811s
+user	1m30.067s
+sys	0m0.707s
 batch_16
-real	5m13.402s
-user	5m12.814s
-sys	0m0.537s
+real	1m30.948s
+user	1m30.279s
+sys	0m0.635s
+batch_32
+real	1m30.591s
+user	1m29.934s
+sys	0m0.640s
+
