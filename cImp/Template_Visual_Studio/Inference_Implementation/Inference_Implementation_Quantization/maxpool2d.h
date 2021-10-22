@@ -12,7 +12,7 @@ void maxPool2D(float (&input_tensor)[w][h][c], float * output_tensor)
 	int q = (w - s + 2)/2;
 	//float (&output_tensor_arrform)[p,q,m] = (float*) malloc(m * p * q * sizeof(float));
 	float matrix_output[p][q][c];
-    cout << "matrix pool output dim " << p << q << c << endl;
+    //cout << "matrix pool output dim " << p << q << c << endl;
 	// o[n][m][p][q] = sumc sum r sums i[n][c][p+r][q+s] * f[m][c][r][s] + b[m]
 	//where n = 1
     //TODO stretch Fix the loop orderings but don't touch atm it works LMAO

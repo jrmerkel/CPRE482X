@@ -33,3 +33,5 @@ L1 Instruction cahce = 32K
 L2 = 1024K
 L3 = 25344K
 2.
+3.7
+1.

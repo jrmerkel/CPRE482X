@@ -23,9 +23,9 @@ void conv2d(float (&input_tensor)[w][h][c], float (&weights)[s][r][c][m], float 
 	int p = h - r + 1;
 	int q = w - s + 1;
 	//float (&output_tensor_arrform)[p,q,m] = (float*) malloc(m * p * q * sizeof(float));
-	int32_t matrix_output[h - r + 1][ w - s + 1][m];
-	float dequant_output[h - r + 1][ w - s + 1][m];
-    cout << "CONV2D matrix output dim " << p << q << m << endl;
+	int32_t matrix_output[h - r + 1][w - s + 1][m];
+	float dequant_output[h - r + 1][w - s + 1][m];
+    // cout << "CONV2D matrix output dim " << p << q << m << endl;
 	// o[n][m][p][q] = sumc sum r sums i[n][c][p+r][q+s] * f[m][c][r][s] + b[m]
 	//where n = 1
     //TODO stretch Fix the loop orderings but don't touch atm it works LMAO
@@ -59,8 +59,8 @@ void conv2d(float (&input_tensor)[w][h][c], float (&weights)[s][r][c][m], float 
 			}
 		}
 	}
-	static const int s_p = static_cast<int>(p);
-	static const int s_q = static_cast<int>(q);
+	// static const int s_p = static_cast<int>(p);
+	// static const int s_q = static_cast<int>(q);
 	dequantize(dequant_output, matrix_output, (float)(scale_input*scale_weight));
 	//<(h - r + 1),(w - s + 1),m>
 	//copy stack array into output tensor pointer

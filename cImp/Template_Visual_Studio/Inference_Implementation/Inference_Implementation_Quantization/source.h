@@ -4,6 +4,7 @@
 #include<string>
 #include<iostream>
 #include <cstring>
+#include <cmath>
 
 using namespace std;
 
@@ -18,7 +19,7 @@ void load_input(string filename, float out[N][N][C])
 	if(ptr_weights!=NULL)
 	{
 		int r2 = fread(out, sizeof(float), (N*N*C), ptr_weights);
-		printf("Read input values: %d\n", r2);
+		// printf("Read input values: %d\n", r2);
 	}
 	fclose(ptr_weights);
 }
@@ -31,7 +32,7 @@ void load_weights(string filename, float (&weights)[s][r][c][m])
 	if(ptr_weights!=NULL)
 	{
 		int r2 = fread(weights, sizeof(float), (s*r*c*m), ptr_weights);
-		printf("Read weight values: %d\n", r2);
+		// printf("Read weight values: %d\n", r2);
 	}
 	fclose(ptr_weights);
 }
@@ -44,7 +45,7 @@ void load_weights(string filename, float (&weights)[x][y])
 	if(ptr_weights!=NULL)
 	{
 		int r2 = fread(weights, sizeof(float), (x*y), ptr_weights);
-		printf("Read weight values: %d\n", r2);
+		// printf("Read weight values: %d\n", r2);
 	}
 	fclose(ptr_weights);
 }
@@ -57,7 +58,7 @@ void load_biases(string filename, float (&biases)[len])
 	if(ptr_weights!=NULL)
 	{
 		int r2 = fread(biases, sizeof(float), len, ptr_weights);
-		printf("Read biases values: %d\n", r2);
+		// printf("Read biases values: %d\n", r2);
 	}
 	fclose(ptr_weights);
 }
@@ -71,7 +72,7 @@ void load_intermediate_maps(string filename, float (&ifmap)[X][Y][Z])
 	if(ptr_weights!=NULL)
 	{
 		int r2 = fread(ifmap, sizeof(float), (X*Y*Z), ptr_weights);
-		printf("Read fmap values: %d\n", r2);
+		// printf("Read fmap values: %d\n", r2);
 	}
 	fclose(ptr_weights);
 }
@@ -84,7 +85,7 @@ void load_intermediate_maps(string filename, float (&ifmap)[X])
 	if(ptr_weights!=NULL)
 	{
 		int r2 = fread(ifmap, sizeof(float), (X), ptr_weights);
-		printf("Read fmap values: %d\n", r2);
+		// printf("Read fmap values: %d\n", r2);
 	}
 	fclose(ptr_weights);
 }
@@ -114,12 +115,44 @@ bool compareMatrix3d(float (&MatrixA)[x][y][z], float (&MatrixB)[x][y][z])
     return true;
 }
 
+template <int x, int y, int z>
+bool compareMaxMatrix3d(float (&MatrixA)[x][y][z], float (&MatrixB)[x][y][z])
+{
+    double max_diff = 0;
+    double curr_diff = 0;
+	int index[3] = {0};
+    for (int i = 0; i < x; i++)
+    {
+        for (int j = 0; j < y; j++)
+        {
+            for (int k = 0; k < z; k++)
+            {
+                curr_diff = fabs(MatrixA[i][j][k] - MatrixB[i][j][k]);
+				if(curr_diff > max_diff)
+				{
+					max_diff = curr_diff;
+					index[0] = i;
+					index [1] = j;
+					index[2] = k;
+				}
+            }
+            
+        }
+        
+    }
+	cout << index[0] << index[1] << index[2] << endl;
+	cout << "MAX DIFF " << max_diff << endl;
+   // cout << "Matrix Match" << endl;
+    return true;
+}
+
+
 template<int x>
 bool compare1d(float (&arrA)[x], float (&arrB)[x])
 {
     for (int i = 0; i < x; i++)
     {
-        if(abs(arrA[i] - arrB[i]) > TOLERANCE)
+        if(fabs(arrA[i] - arrB[i]) > TOLERANCE)
         {
             cout << i << " " << arrA[i] << " " << arrB[i] << endl;
             cout << "!!!!!!!!!MISMATCH!!!!!!!!" << endl;
