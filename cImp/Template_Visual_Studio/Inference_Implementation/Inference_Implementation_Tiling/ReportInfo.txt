@@ -43,6 +43,7 @@ real	1m36.865s
 user	1m36.353s
 sys	0m0.475s
 3.
+These were achieved by conv2d_outer_tile.h
 batch_2
 real	1m31.166s
 user	1m30.487s

@@ -157,7 +157,7 @@ int main()
 
 		denseRelu(flatten, weights_dense0, biases_dense0, (float * )output_dense0);
 		// compare1d(output_dense0, fmap_dense0);
-		// cout << fmap_dense1[0] << " " << output_dense1[0] << endl;
+		//cout << fmap_dense1[0] << " " << output_dense1[0] << endl;
 		//cout << compare1d(output_dense1, fmap_dense1) << endl;
 		//comparemax1d(output_dense1, fmap_dense1);
 		denseSoftmax(output_dense0, weights_dense1, biases_dense1, (float * )output_dense1);

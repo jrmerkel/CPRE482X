@@ -16,7 +16,7 @@ void conv2d(float (&input_tensor)[w][h][c], float (&weights)[s][r][c][m], float 
     //cout << "matrix output dim " << p << q << m << endl;
 	// o[n][m][p][q] = sumc sum r sums i[n][c][p+r][q+s] * f[m][c][r][s] + b[m]
 	//where n = 1
-    
+
 	for(int z = 0; z < q; z++) ///////////////////////////////m = x
 	{
 		for(int y = 0; y < p; y++)////////////////////////////p = y
