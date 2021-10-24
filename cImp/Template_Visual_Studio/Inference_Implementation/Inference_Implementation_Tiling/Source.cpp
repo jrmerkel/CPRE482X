@@ -163,6 +163,6 @@ int main()
 		denseSoftmax(output_dense0, weights_dense1, biases_dense1, (float * )output_dense1);
 
 		
-		// compare1d(output_dense1, fmap_dense1);
-		// comparemax1d(output_dense1, fmap_dense1);
+		compare1d(output_dense1, fmap_dense1);
+		comparemax1d(output_dense1, fmap_dense1);
 }

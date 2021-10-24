@@ -20,8 +20,7 @@ float quantize_weights(float (&weights)[s][r][c][m], int8_t (&quant_weights)[s][
 			}
 		}
 	}
-    float scale=127/max;
-
+    float scale=127.0/max;
     for(int i=0; i<s; i++)
 	{
 		for(int j=0; j<r; j++)
@@ -51,7 +50,7 @@ float quantize_weights(float (&weights)[x][y], int8_t (&quant_weights)[x][y]){
 		}
 	}
 
-    float scale=127/max;
+    float scale=127.0/max;
 
     for(int i=0; i<x; i++)
 	{

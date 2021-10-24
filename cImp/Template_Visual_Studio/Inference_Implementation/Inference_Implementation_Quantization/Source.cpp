@@ -59,26 +59,6 @@ int main()
 		int8_t q_weights_layer0[5][5][3][32];
 		int8_t q_biases_layer0[32];
 
-		int8_t q_weights_layer1[5][5][32][32];
-		int8_t q_biases_layer1[32];
-
-		int8_t q_weights_layer2[3][3][32][64];
-		int8_t q_biases_layer2[64];
-
-		int8_t q_weights_layer3[3][3][64][64];
-		int8_t q_biases_layer3[64];
-
-		int8_t q_weights_layer4[3][3][64][64];
-		int8_t q_biases_layer4[64];
-
-		int8_t q_weights_layer5[3][3][64][128];
-		int8_t q_biases_layer5[128];
-
-		int8_t q_weights_dense0[2048][256];
-		int8_t q_biases_dense0[256];
-
-		int8_t q_weights_dense1[256][200];
-		int8_t q_biases_dense1[200];
 		load_weights("../JupyterExport/conv2d_weights.bin", weights_layer0);
 		load_weights("../JupyterExport/conv2d_1_weights.bin", weights_layer1);
 		load_weights("../JupyterExport/conv2d_2_weights.bin", weights_layer2);
@@ -98,16 +78,6 @@ int main()
 
 		load_biases("../JupyterExport/dense_bias.bin",biases_dense0);
 		load_biases("../JupyterExport/dense_1_bias.bin",biases_dense1);
-
-		quantize_weights(weights_layer0, q_weights_layer0);
-		quantize_weights(weights_layer1, q_weights_layer1);
-		quantize_weights(weights_layer2, q_weights_layer2);
-		quantize_weights(weights_layer3, q_weights_layer3);
-		quantize_weights(weights_layer4, q_weights_layer4);
-		quantize_weights(weights_layer5, q_weights_layer5);
-
-		quantize_weights(weights_dense0, q_weights_dense0);
-		quantize_weights(weights_dense1, q_weights_dense1);
 		// Load the intermediate feature map data from binary files.
 		// First load the flattened array then reshape according to intermediate feature map dimensions.
 		float fmap_layer0[60][60][32];
@@ -159,7 +129,7 @@ int main()
 		//Perform Inference
 		//First Conv2d
 		conv2d(input, weights_layer0, biases_layer0, (float * )output_layer0);
-		compareMaxMatrix3d(output_layer0, fmap_layer0);
+		//(output_layer0, fmap_layer0);
 		//Which goes into Conv2d_1
 		conv2d(output_layer0, weights_layer1, biases_layer1, (float *) output_layer1);
 		compareMaxMatrix3d(output_layer1, fmap_layer1);

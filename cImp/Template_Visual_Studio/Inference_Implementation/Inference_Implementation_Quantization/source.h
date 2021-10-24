@@ -120,6 +120,7 @@ bool compareMaxMatrix3d(float (&MatrixA)[x][y][z], float (&MatrixB)[x][y][z])
 {
     double max_diff = 0;
     double curr_diff = 0;
+	double average_diff = 0;
 	int index[3] = {0};
     for (int i = 0; i < x; i++)
     {
@@ -128,6 +129,7 @@ bool compareMaxMatrix3d(float (&MatrixA)[x][y][z], float (&MatrixB)[x][y][z])
             for (int k = 0; k < z; k++)
             {
                 curr_diff = fabs(MatrixA[i][j][k] - MatrixB[i][j][k]);
+				average_diff += curr_diff;
 				if(curr_diff > max_diff)
 				{
 					max_diff = curr_diff;
@@ -142,6 +144,7 @@ bool compareMaxMatrix3d(float (&MatrixA)[x][y][z], float (&MatrixB)[x][y][z])
     }
 	cout << index[0] << index[1] << index[2] << endl;
 	cout << "MAX DIFF " << max_diff << endl;
+	cout << "AVG DIFF " << average_diff/(x*y*z) << endl;
    // cout << "Matrix Match" << endl;
     return true;
 }

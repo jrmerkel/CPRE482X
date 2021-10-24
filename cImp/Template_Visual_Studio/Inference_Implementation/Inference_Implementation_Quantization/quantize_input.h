@@ -11,9 +11,9 @@ float quantize_input(float (&input_tensor)[w][h][c], uint8_t (&input)[w][h][c])
 		{
 			for(int k=0; k<c; k++)
 			{
-				if(abs(input_tensor[i][j][k])>max)
+				if(fabs(input_tensor[i][j][k])>max)
 				{
-					max=abs(input_tensor[i][j][k]);
+					max=fabs(input_tensor[i][j][k]);
 				}
 			}
 		}
@@ -38,9 +38,9 @@ float quantize_input(float (&input_arr)[w], uint8_t (&q_input)[w])
 	float max=0;
 	for(int i=0; i<w; i++)
 	{
-		if(abs(input_arr[i])>max)
+		if(fabs(input_arr[i])>max)
 		{
-			max=abs(input_arr[i]);
+			max=fabs(input_arr[i]);
 		}
 	}
     float scale=255/max;

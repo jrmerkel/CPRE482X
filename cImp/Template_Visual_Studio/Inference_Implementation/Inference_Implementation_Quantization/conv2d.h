@@ -25,22 +25,22 @@ void conv2d(float (&input_tensor)[w][h][c], float (&weights)[s][r][c][m], float 
 	//float (&output_tensor_arrform)[p,q,m] = (float*) malloc(m * p * q * sizeof(float));
 	int32_t matrix_output[h - r + 1][w - s + 1][m];
 	float dequant_output[h - r + 1][w - s + 1][m];
+	memset( matrix_output, 0, p*q*m*sizeof(int32_t) );
     // cout << "CONV2D matrix output dim " << p << q << m << endl;
 	// o[n][m][p][q] = sumc sum r sums i[n][c][p+r][q+s] * f[m][c][r][s] + b[m]
 	//where n = 1
     //TODO stretch Fix the loop orderings but don't touch atm it works LMAO
-	for(int x = 0; x < m; x++) ///////////////////////////////m = x
+	for(int z = 0; z < q; z++) ///////////////////////////////m = x
 	{
 		for(int y = 0; y < p; y++)////////////////////////////p = y
 		{
-			for(int z = 0; z < q; z++)////////////////////////q = z
+			for(int x = 0; x < m; x++)////////////////////////q = z
 			{
-				matrix_output[z][y][x]  = 0;
-				for(int i = 0; i < c; i++)////////////////////c = i
+				for(int k = 0; k < s; k++)////////////////////c = i
 				{
 					for(int j = 0; j < r; j++)////////////////r = j
 					{
-						for(int k = 0; k < s; k++)////////////s = k
+						for(int i = 0; i < c; i++)////////////s = k
 						{
 							//matrix[m][p][q] = i[c][p + r][q + s] * f[m][c][r][s]
                             //Ours is not in this exact order
@@ -49,6 +49,15 @@ void conv2d(float (&input_tensor)[w][h][c], float (&weights)[s][r][c][m], float 
                         }
 					}
 				}
+			}
+		}
+	}
+	for(int z = 0; z < q; z++)
+	{
+		for(int y = 0; y < p; y++)
+		{
+			for(int x = 0; x < m; x++)
+			{
 				//Add bias
 				matrix_output[z][y][x]   += quant_biases[x];
 				//activation function relu if negative then 0
