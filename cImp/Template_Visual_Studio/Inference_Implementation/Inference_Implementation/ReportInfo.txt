@@ -1,29 +1,130 @@
 3.2
 real	0m3.011s
 user	0m2.902s
-sys	0m0.010s
+sys	0m0.010
+
+1 inference:
+real	0m0.983s
+user	0m0.947s
+sys	0m0.013s
+
+
 3.3
 perf.data in the folder
 3.4
-1. (divide time by 3 for 3.2)
+1. The baseline time for one inference using our C++ implementation was this:
+real	0m0.983s
+user	0m0.947s
+sys	0m0.013s
+The time to perform inference measured by Tensorboard for the same input (the first one), was just under 100 ms. That is almost 10 times lower than the value
+we got using our implementation.
+
 2. Use this
 60.08%  source   source                        [.] conv2d<60, 60, 32, 5, 5, 3◆
-  16.84%  source   source                        [.] conv2d<26, 26, 64, 3, 3, 6▒
-   9.59%  source   source                        [.] conv2d<28, 28, 32, 3, 3, 6▒
-   6.23%  source   source                        [.] conv2d<64, 64, 3, 5, 5, 32▒
-   3.63%  source   source                        [.] conv2d<10, 10, 64, 3, 3, 1▒
-   2.80%  source   source                        [.] conv2d<12, 12, 64, 3, 3, 6▒
-   0.42%  source   source                        [.] denseRelu<2048, 256>      ▒
-   0.08%  source   source                        [.] maxPool2D<56, 56, 32>     ▒
-   0.06%  source   source                        [.] compareMatrix3d<60, 60, 32▒
-   0.05%  source   source                        [.] compareMatrix3d<56, 56, 32▒
-   0.03%  source   source                        [.] denseSoftmax<256, 200>    ▒
-   0.03%  source   source                        [.] maxPool2D<24, 24, 64>     ▒
-   0.02%  source   source                        [.] compareMatrix3d<26, 26, 64▒
-   0.02%  source   libc-2.17.so                  [.] __memcpy_ssse3_back       ▒
-   0.02%  source   source                        [.] compareMatrix3d<24, 24, 64▒
-   0.01%  source   source                        [.] compareMatrix3d<28, 28, 32▒
-   0.01%  source   ld-2.17.so                    [.] _dl_relocate_object       ▒
-   0.01%  source   source                        [.] maxPool2D<8, 8, 128>      
-The reason why is time complexity
-3.5
+16.84%  source   source                        [.] conv2d<26, 26, 64, 3, 3, 6▒
+9.59%  source   source                        [.] conv2d<28, 28, 32, 3, 3, 6▒
+6.23%  source   source                        [.] conv2d<64, 64, 3, 5, 5, 32▒
+3.63%  source   source                        [.] conv2d<10, 10, 64, 3, 3, 1▒
+2.80%  source   source                        [.] conv2d<12, 12, 64, 3, 3, 6▒
+0.42%  source   source                        [.] denseRelu<2048, 256>      ▒
+0.08%  source   source                        [.] maxPool2D<56, 56, 32>     ▒
+0.06%  source   source                        [.] compareMatrix3d<60, 60, 32▒
+0.05%  source   source                        [.] compareMatrix3d<56, 56, 32▒
+0.03%  source   source                        [.] denseSoftmax<256, 200>    ▒
+0.03%  source   source                        [.] maxPool2D<24, 24, 64>     ▒
+0.02%  source   source                        [.] compareMatrix3d<26, 26, 64▒
+0.02%  source   libc-2.17.so                  [.] __memcpy_ssse3_back       ▒
+0.02%  source   source                        [.] compareMatrix3d<24, 24, 64▒
+0.01%  source   source                        [.] compareMatrix3d<28, 28, 32▒
+0.01%  source   ld-2.17.so                    [.] _dl_relocate_object       ▒
+0.01%  source   source                        [.] maxPool2D<8, 8, 128>      
+The reason why is time complexity and the dimensions of the input feature map for each layer.
+
+3.5 Multithreading
+1. All of these times are recorded for only one inference and should be compared the baseline (1 inference)
+  - 2 threads:real	0m0.833s
+user	0m1.588s
+sys	0m0.012s
+
+  - 4 threads:real	0m0.430s
+user	0m1.588s
+sys	0m0.004s
+
+  - 8 threads:real	0m0.456s
+user	0m1.564s
+sys	0m0.013s
+
+  - 16 threads:real	0m0.444s
+user	0m1.563s
+sys	0m0.012s
+
+  - 32 threads:real	0m0.424s
+user	0m1.554s
+sys	0m0.009s
+
+2. The plot of inference latency over number of plots is inside of the Inference_Implementation_Multithreaded folder.
+The observed optimal number of threads is 4 because the speed up gains aren't significant after that. After running the command lscpu, we observed
+that we only have 4 cpu threads available through our VDI, which explains how the speedup isn't significant for more threads. For more than 4 threads,
+the overhead of implementing and scheduling the different threads on the 4 logical CPU threads is not worth it and does not correspond to performance gains.
+
+3. All of the observed inference times using tensorboard were lower than the lowest inference time for a signle inference from our multithreaded C++ implementaiton.
+The reason for this could be because tensorflow uses many optimization techniques both for training and inference, such as cache tiling, quantization, multithreading,
+and others. Since we only use one optimization technique, multithreading, the inference time for our implementation is significantly larger. The longest inference 
+time observed during tensorboard profiling was 100 ms, while the minimum inference time for one input using our multithreaded version was just over 400 ms.
+
+
+
+
+
+3.6 Tiling
+1. L1 data = 32K
+L1 Instruction cahce = 32K
+L2 = 1024K
+L3 = 25344K
+2.
+
+
+3.7 Quantization
+1. From the model.summary() function from TensorFlow, we know we have 770,216 parameters total, across all layers.
+For 32-bit float, the total size will be 24,646,912 bits, or 3,080,864 bytes (3MB)
+For 8-bit int, the total size will be 6,161,728 bits, or 770,216 bytes (770kB)
+For 2-bit int, the total size will be 1,540,432 bits, or 192,554 bytes (192kB)
+
+Parts 2 and 3 are on the Inference_Profile jupyter notebook.
+
+5. The max difference and average difference for all the layers are printed on the terminal. Here is the output for one sample:
+bash-4.2$ time ./source
+331630
+MAX DIFF 0.114749
+AVG DIFF 0.0017873
+161434
+MAX DIFF 0.154335
+AVG DIFF 0.00354491
+151640
+MAX DIFF 0.238607
+AVG DIFF 0.00469537
+573
+MAX DIFF 0.396685
+AVG DIFF 0.018129
+5391
+MAX DIFF 0.59357
+AVG DIFF 0.0197452
+index 12
+expected 0.152912 actual 0.206998
+MAX DIFF 0.0540859
+
+6. The resulting times with the quantization were:
+real	0m0.946s
+user	0m0.918s
+sys	0m0.010s
+
+While the baseline implementation for one inference resulted in:
+real	0m0.983s
+user	0m0.947s
+sys	0m0.013s
+
+There is a slight speed up by using integers instead of floats for the computations, but this speedup is limited by the overhead of quantizing all the weights,
+activations, and biases.
+
+7. We can implement this operation by right-shifting the values, instead of dividing it by a real value.
+
