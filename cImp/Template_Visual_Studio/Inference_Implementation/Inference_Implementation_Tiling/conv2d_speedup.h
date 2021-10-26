@@ -1,6 +1,6 @@
 #pragma once
 
-#define BLOCK_SIZE 16
+#define BLOCK_SIZE 8
 
 
 template<int w, int h, int c, int s, int r, int m>
@@ -24,9 +24,9 @@ void conv2d(float (&input_tensor)[w][h][c], float (&weights)[s][r][c][m], float 
 			for(int x = 0; x < m; x+=BLOCK_SIZE)////////////////////////q = z
 			{
 
-				for(int k = 0; k < s; k++)////////////////////c = i
+						for(int k = 0; k < s; k++)////////////////////c = i
 				{
-					for(int j = 0; j < r; j++)////////////////r = j
+							for(int j = 0; j < r; j++)////////////////r = j
 					{
 				
 				// for(int ii = i; ii < min(c,i+BLOCK_SIZE); ii++)
