@@ -78,12 +78,57 @@ time observed during tensorboard profiling was 100 ms, while the minimum inferen
 
 
 
-3.6 Tiling
+3.6 Tiling all of these are 100 iterations
 1. L1 data = 32K
 L1 Instruction cahce = 32K
 L2 = 1024K
 L3 = 25344K
 2.
+old loop
+real	1m36.865s
+user	1m36.353s
+sys	0m0.475s
+
+reordered loop 
+real	1m30.768s
+user	1m30.243s
+sys	0m0.476s
+reordered loop had 1.0667 speedup.
+3.
+batch_2 
+real	1m24.510s
+user	1m23.883s
+sys	0m0.493s
+
+
+batch_4
+real	1m24.773s
+user	1m23.987s
+sys	0m0.585s
+
+
+batch_8
+real	1m23.677s
+user	1m23.179s
+sys	0m0.483s
+
+
+batch_16
+real	1m23.391s
+user	1m22.923s
+sys	0m0.446s
+
+batch_32
+real	1m23.755s
+user	1m22.937s
+sys	0m0.471s
+
+batch_128
+real	1m26.226s
+user	1m25.704s
+sys	0m0.476s
+
+Best speedup block size was roughly 16 for 1.04 speedup. The reasons being the shorter blocks are getting mroe reuse but are running into more loop control overhead by all the branching. Then at 16 the best point is achieved. Then going to the max of 128 doesn't do any good
 
 
 3.7 Quantization

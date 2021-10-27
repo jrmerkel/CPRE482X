@@ -1,7 +1,3 @@
-real	1m30.224s
-user	1m29.660s
-sys	0m0.533s
-
 OG
 real	1m30.768s
 user	1m30.243s
@@ -41,8 +37,4 @@ user	1m25.704s
 sys	0m0.476s
 
 
-
-real	1m26.929s
-user	1m26.374s
-sys	0m0.541s
 
