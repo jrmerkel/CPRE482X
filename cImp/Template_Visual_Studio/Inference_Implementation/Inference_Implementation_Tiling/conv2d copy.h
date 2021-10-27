@@ -1,6 +1,6 @@
 #pragma once
 
-#define BLOCK_SIZE 2
+#define BLOCK_SIZE 32
 
 
 template<int w, int h, int c, int s, int r, int m>

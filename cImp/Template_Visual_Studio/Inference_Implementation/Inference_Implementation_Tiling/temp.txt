@@ -7,14 +7,42 @@ real	1m30.768s
 user	1m30.243s
 sys	0m0.476s
 
+batch_2 
+real	1m24.510s
+user	1m23.883s
+sys	0m0.493s
+
+
+batch_4
+real	1m24.773s
+user	1m23.987s
+sys	0m0.585s
+
 
 batch_8
-real	1m27.073s
-user	1m26.577s
-sys	0m0.485s
+real	1m23.677s
+user	1m23.179s
+sys	0m0.483s
+
 
 batch_16
-real	1m26.923s
-user	1m26.430s
-sys	0m0.483s
+real	1m23.391s
+user	1m22.923s
+sys	0m0.446s
+
+batch_32
+real	1m23.755s
+user	1m22.937s
+sys	0m0.471s
+
+batch_128
+real	1m26.226s
+user	1m25.704s
+sys	0m0.476s
+
+
+
+real	1m26.929s
+user	1m26.374s
+sys	0m0.541s
 
