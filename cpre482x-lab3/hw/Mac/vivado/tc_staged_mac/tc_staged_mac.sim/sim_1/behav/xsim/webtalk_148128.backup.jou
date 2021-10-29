@@ -1,0 +1,12 @@
+#-----------------------------------------------------------
+# Webtalk v2020.1 (64-bit)
+# SW Build 2902540 on Wed May 27 19:54:35 MDT 2020
+# IP Build 2902112 on Wed May 27 22:43:36 MDT 2020
+# Start of session at: Fri Oct 29 16:53:46 2021
+# Process ID: 148128
+# Current directory: /home/jrmerkel/Documents/School/482/cpre482x-lab3/hw/Mac/vivado/tc_staged_mac/tc_staged_mac.sim/sim_1/behav/xsim
+# Command line: wbtcv -mode batch -source /home/jrmerkel/Documents/School/482/cpre482x-lab3/hw/Mac/vivado/tc_staged_mac/tc_staged_mac.sim/sim_1/behav/xsim/xsim.dir/staged_mac_behav/webtalk/xsim_webtalk.tcl -notrace
+# Log file: /home/jrmerkel/Documents/School/482/cpre482x-lab3/hw/Mac/vivado/tc_staged_mac/tc_staged_mac.sim/sim_1/behav/xsim/webtalk.log
+# Journal file: /home/jrmerkel/Documents/School/482/cpre482x-lab3/hw/Mac/vivado/tc_staged_mac/tc_staged_mac.sim/sim_1/behav/xsim/webtalk.jou
+#-----------------------------------------------------------
+source /home/jrmerkel/Documents/School/482/cpre482x-lab3/hw/Mac/vivado/tc_staged_mac/tc_staged_mac.sim/sim_1/behav/xsim/xsim.dir/staged_mac_behav/webtalk/xsim_webtalk.tcl -notrace
