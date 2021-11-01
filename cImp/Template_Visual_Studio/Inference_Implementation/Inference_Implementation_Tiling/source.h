@@ -169,6 +169,84 @@ void export_binary(float (&fmap)[X][Y][Z], string filename)
 	fclose(ptr_weights);
 }
 
+
+//[s][r][c][m]
+template<int X, int Y, int Z, int W>
+void export_weights( string filename,float (&fmap)[X][Y][Z][W])
+{
+
+	float out[W][Z][Y][X];
+	for(int s = 0; s <X; s++)
+	{
+		for(int r = 0; r < Y; r++)
+		{
+			for(int c = 0; c<Z; c++)
+			{
+				for(int m = 0; m < W; m++)
+				{
+					out[m][c][r][s] = fmap[s][r][c][m];
+				}
+			}
+		}
+	}
+    FILE* ptr_weights = fopen(filename.c_str(), "wb");  // r for read, b for binary
+	if(ptr_weights!=NULL)
+	{
+		int w2 = fwrite(out, sizeof(float), (X*Y*Z*W), ptr_weights);
+		printf("wrote binary to : %s\n", filename.c_str());
+	}
+	fclose(ptr_weights);
+}
+
+
+//[w][h][c]
+template<int X, int Y, int Z>
+void export_input( string filename,float (&fmap)[X][Y][Z])
+{
+
+	float out[Z][X][Y];
+	for(int w = 0; w <X; w++)
+	{
+		for(int h = 0; h < Y; h++)
+		{
+			for(int c = 0; c<Z; c++)
+			{
+				out[c][w][h] = fmap[w][h][c];
+			}
+		}
+	}
+    FILE* ptr_weights = fopen(filename.c_str(), "wb");  // r for read, b for binary
+	if(ptr_weights!=NULL)
+	{
+		int w2 = fwrite(out, sizeof(float), (X*Y*Z), ptr_weights);
+		printf("wrote binary to : %s\n", filename.c_str());
+	}
+	fclose(ptr_weights);
+}
+
+
+template<int X, int Y, int Z, int W>
+void compareReorder(float (&fmap)[W][Z][Y][X],float (&other)[X][Y][Z][W])
+{
+
+	
+	for(int s = 0; s <X; s++)
+	{
+		for(int r = 0; r < Y; r++)
+		{
+			for(int c = 0; c<Z; c++)
+			{
+				for(int m = 0; m < W; m++)
+				{
+					if(fabs(fmap[m][c][r][s] - other[s][r][c][m]) > TOLERANCE)
+					{
+						cout << "ERROR" << endl;
+					}
+				}
+			}
+		}
+	}
+}
 template<int X>
 void export_binary(float (&fmap)[X], string filename)
 {

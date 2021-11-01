@@ -1,0 +1,42 @@
+a. Describe the modules functionality, including how to control the accumulator state. Would
+you ever need to put a non-zero value in? Why?
+
+The function of this module is to take in two values of size C_DATA_WIDTH then on the next cycle multiply and accumulate into another register of size C_DATA_WIDTH*2.
+The output of this Mac unit is the clamped value of the least significant C_DATA_WIDTH - 1 downto 0.
+In order to set to a constant (the reason being to set a bias for non-zero or to reset the accumulation) the TUSER flag is set to '1'
+
+
+b. Identify a few sample inputs and corresponding outputs that you expect for this module.
+
+Sample inputs are the weights and the activations from the previous layer. This will be two 8-bit signed values that are multiplied together and then accumulated.
+The biases will be another input.
+For example, a series of values such as 
+--set accumulator using TUSER
+0x000F
+0x08 * 0x20 + 0x000F = 0x001F
+0x23 * 0x80 + 0x001F = EE9F
+
+c. Define the module interface (i.e., draw the symbol box around the basic design provided by
+the textbook).
+
+
+
+d. Prior to authoring the HDL of your implementation, create a schematic diagram of you design
+with signal names, widths, and ports defined.
+
+
+
+e. Calculate (and report) all of the required bit-widths you will need based on the specific layer
+you implemented. Additionally, describe the appropriate quantization approach for the output
+of your accumulator based on Tensorflow Lite’s quantization (i.e., 8-bit integers).
+
+
+
+f. Implement in VHDL using your previously-designed modules. Test the design for edge-case
+inputs using whatever approach you prefer (VHDL testbench, do file, etc.), and justify why
+your tests were sufficient. Submit your VHDL files and testbench in a folder called Mac.
+
+
+
+g. Synthesize your MAC unit and report the maximum frequency, resource utilization, and the
+critical path of the design. Separate instructions for this to follow. Calculate the maximum

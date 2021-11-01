@@ -14,8 +14,11 @@ int main()
 
 		// Load the input data from binary file.
 		// First load the flattened array then reshape according to input dimensions.
-		float input[64][64][3];
-		load_input("../JupyterExport/input4.bin", input);
+		//float input[64][64][3];
+		float input[3][64][64];
+		load_input("../JupyterExport/input4_cwh.bin", input);
+		//export_input("../JupyterExport/input4_cwh.bin", input);
+
 			//Print out some test values to see if we are matching the input. 
 		//For x_val[4] we should see
 			/*
@@ -32,22 +35,23 @@ int main()
 		
 		// Load the weights data from binary files.
 		// First load the flattened array then reshape according to weights/bias dimensions.
-		float weights_layer0[5][5][3][32];
+		float weights_layer0[32][3][5][5];
+		float weights_layer0_a[5][5][3][32];
 		float biases_layer0[32];
 
-		float weights_layer1[5][5][32][32];
+		float weights_layer1[32][32][5][5];
 		float biases_layer1[32];
 
-		float weights_layer2[3][3][32][64];
+		float weights_layer2[64][32][3][3];
 		float biases_layer2[64];
 
-		float weights_layer3[3][3][64][64];
+		float weights_layer3[64][64][3][3];
 		float biases_layer3[64];
 
-		float weights_layer4[3][3][64][64];
+		float weights_layer4[64][64][3][3];
 		float biases_layer4[64];
 
-		float weights_layer5[3][3][64][128];
+		float weights_layer5[128][64][3][3];
 		float biases_layer5[128];
 
 		float weights_dense0[2048][256];
@@ -56,15 +60,27 @@ int main()
 		float weights_dense1[256][200];
 		float biases_dense1[200];
 		
-		load_weights("../JupyterExport/conv2d_weights.bin", weights_layer0);
-		load_weights("../JupyterExport/conv2d_1_weights.bin", weights_layer1);
-		load_weights("../JupyterExport/conv2d_2_weights.bin", weights_layer2);
-		load_weights("../JupyterExport/conv2d_3_weights.bin", weights_layer3);
-		load_weights("../JupyterExport/conv2d_4_weights.bin", weights_layer4);
-		load_weights("../JupyterExport/conv2d_5_weights.bin", weights_layer5);
+		load_weights("../JupyterExport/conv2d_c_weights.bin", weights_layer0);
+		load_weights("../JupyterExport/conv2d_weights.bin", weights_layer0_a);
+		compareReorder(weights_layer0, weights_layer0_a);
+		load_weights("../JupyterExport/conv2d_c_1_weights.bin", weights_layer1);
+		load_weights("../JupyterExport/conv2d_c_2_weights.bin", weights_layer2);
+		load_weights("../JupyterExport/conv2d_c_3_weights.bin", weights_layer3);
+		load_weights("../JupyterExport/conv2d_c_4_weights.bin", weights_layer4);
+		load_weights("../JupyterExport/conv2d_c_5_weights.bin", weights_layer5);
 
 		load_weights("../JupyterExport/dense_weights.bin", weights_dense0);
 		load_weights("../JupyterExport/test2.bin", weights_dense1);
+
+		// export_weights("../JupyterExport/conv2d_c_weights.bin", weights_layer0);
+		// export_weights("../JupyterExport/conv2d_c_1_weights.bin", weights_layer1);
+		// export_weights("../JupyterExport/conv2d_c_2_weights.bin", weights_layer2);
+		// export_weights("../JupyterExport/conv2d_c_3_weights.bin", weights_layer3);
+		// export_weights("../JupyterExport/conv2d_c_4_weights.bin", weights_layer4);
+		// export_weights("../JupyterExport/conv2d_c_5_weights.bin", weights_layer5);
+		// export_weights("../JupyterExport/dense_weights.bin", weights_dense0);
+		// export_weights("../JupyterExport/test2.bin", weights_dense1);
+
 
 		load_biases("../JupyterExport/conv2d_bias.bin",biases_layer0);
 		load_biases("../JupyterExport/conv2d_1_bias.bin",biases_layer1);
@@ -77,63 +93,108 @@ int main()
 		load_biases("../JupyterExport/dense_1_bias.bin",biases_dense1);
 		// Load the intermediate feature map data from binary files.
 		// First load the flattened array then reshape according to intermediate feature map dimensions.
-		float fmap_layer0[60][60][32];
-		float fmap_layer1[56][56][32];
-		float fmap_layer2[26][26][64];
-		float fmap_layer3[24][24][64];
-		float fmap_layer4[10][10][64];
-		float fmap_layer5[8][8][128];
+		// float fmap_layer0[60][60][32];
+		// float fmap_layer1[56][56][32];
+		// float fmap_layer2[26][26][64];
+		// float fmap_layer3[24][24][64];
+		// float fmap_layer4[10][10][64];
+		// float fmap_layer5[8][8][128];
+
+		// float fmap_dense0[256];
+		// float fmap_dense1[200];
+
+		// float fmap_maxpool0[28][28][32];
+		// float fmap_maxpool1[12][12][64];
+		// float fmap_maxpool2[4][4][128];
+
+		float fmap_layer0[32][60][60];
+		float fmap_layer1[32][56][56];
+		float fmap_layer2[64][26][26];
+		float fmap_layer3[64][24][24];
+		float fmap_layer4[64][10][10];
+		float fmap_layer5[128][8][8];
 
 		float fmap_dense0[256];
 		float fmap_dense1[200];
 
-		float fmap_maxpool0[28][28][32];
-		float fmap_maxpool1[12][12][64];
-		float fmap_maxpool2[4][4][128];
+		float fmap_maxpool0[32][28][28];
+		float fmap_maxpool1[64][12][12];
+		float fmap_maxpool2[128][4][4];
+		load_intermediate_maps("../JupyterExport/4conv2d_cwhintermediate.bin", fmap_layer0);
+		load_intermediate_maps("../JupyterExport/4conv2d_cwh_1intermediate.bin", fmap_layer1);
+		load_intermediate_maps("../JupyterExport/4conv2d_cwh_2intermediate.bin", fmap_layer2);
+		load_intermediate_maps("../JupyterExport/4conv2d_cwh_3intermediate.bin", fmap_layer3);
+		load_intermediate_maps("../JupyterExport/4conv2d_cwh_4intermediate.bin", fmap_layer4);
+		load_intermediate_maps("../JupyterExport/4conv2d_cwh_5intermediate.bin", fmap_layer5);
 
-
-		load_intermediate_maps("../JupyterExport/4conv2dintermediate.bin", fmap_layer0);
-		load_intermediate_maps("../JupyterExport/4conv2d_1intermediate.bin", fmap_layer1);
-		load_intermediate_maps("../JupyterExport/4conv2d_2intermediate.bin", fmap_layer2);
-		load_intermediate_maps("../JupyterExport/4conv2d_3intermediate.bin", fmap_layer3);
-		load_intermediate_maps("../JupyterExport/4conv2d_4intermediate.bin", fmap_layer4);
-		load_intermediate_maps("../JupyterExport/4conv2d_5intermediate.bin", fmap_layer5);
+		// export_input("../JupyterExport/4conv2d_cwhintermediate.bin", fmap_layer0);
+		// export_input("../JupyterExport/4conv2d_cwh_1intermediate.bin", fmap_layer1);
+		// export_input("../JupyterExport/4conv2d_cwh_2intermediate.bin", fmap_layer2);
+		// export_input("../JupyterExport/4conv2d_cwh_3intermediate.bin", fmap_layer3);
+		// export_input("../JupyterExport/4conv2d_cwh_4intermediate.bin", fmap_layer4);
+		// export_input("../JupyterExport/4conv2d_cwh_5intermediate.bin", fmap_layer5);
 
 		load_intermediate_maps("../JupyterExport/4denseintermediate.bin", fmap_dense0);
 		load_intermediate_maps("../JupyterExport/4dense_1intermediate.bin", fmap_dense1);
 
-		load_intermediate_maps("../JupyterExport/4max_pooling2dintermediate.bin", fmap_maxpool0);
-		load_intermediate_maps("../JupyterExport/4max_pooling2d_1intermediate.bin", fmap_maxpool1);
-		load_intermediate_maps("../JupyterExport/4max_pooling2d_2intermediate.bin", fmap_maxpool2);
+		load_intermediate_maps("../JupyterExport/4max_pooling2d_cwhintermediate.bin", fmap_maxpool0);
+		load_intermediate_maps("../JupyterExport/4max_pooling2d_cwh_1intermediate.bin", fmap_maxpool1);
+		load_intermediate_maps("../JupyterExport/4max_pooling2d_cwh_2intermediate.bin", fmap_maxpool2);
+
+		// export_input("../JupyterExport/4max_pooling2d_cwhintermediate.bin", fmap_maxpool0);
+		// export_input("../JupyterExport/4max_pooling2d_cwh_1intermediate.bin", fmap_maxpool1);
+		// export_input("../JupyterExport/4max_pooling2d_cwh_2intermediate.bin", fmap_maxpool2);
 		// Execute the inference code and validate against the imported inference output. 
 		// For each of the input, for all of the intermediate feature maps provide the binary files for both the imported feature maps from python (true value) and the ones predicted by your own C/C++ implementation.
 		// Were you able to get similar final classification probability as the python version executing? if not what was the difference.
-		float output_layer0[60][60][32];
-		float output_layer1[56][56][32];
-		float output_layer2[26][26][64];
-		float output_layer3[24][24][64];
-		float output_layer4[10][10][64];
-		float output_layer5[8][8][128];
+		// float output_layer0[60][60][32];
+		// float output_layer1[56][56][32];
+		// float output_layer2[26][26][64];
+		// float output_layer3[24][24][64];
+		// float output_layer4[10][10][64];
+		// float output_layer5[8][8][128];
+
+		// float output_dense0[256];
+		// float output_dense1[200];
+
+		// float output_maxpool0[28][28][32];
+		// float output_maxpool1[12][12][64];
+		// float output_maxpool2[4][4][128];
+
+		float output_layer0[32][60][60];
+		float output_layer1[32][56][56];
+		float output_layer2[64][26][26];
+		float output_layer3[64][24][24];
+		float output_layer4[64][10][10];
+		float output_layer5[128][8][8];
 
 		float output_dense0[256];
 		float output_dense1[200];
 
-		float output_maxpool0[28][28][32];
-		float output_maxpool1[12][12][64];
-		float output_maxpool2[4][4][128];
+		float output_maxpool0[32][28][28];
+		float output_maxpool1[64][12][12];
+		float output_maxpool2[128][4][4];
+
 		float flatten[2048];
 
 		//Perform Inference
 		//First Conv2d
+
 		conv2d(input, weights_layer0, biases_layer0, (float * )output_layer0);
-		//compareMatrix3d(output_layer0, fmap_layer0);
+
+	//	compareMatrix3d(output_layer0, fmap_layer0);
+		// cout << output_layer0[0][0][0] << " " << fmap_layer0[0][0][0]  << endl;
+		// cout << output_layer0[1][0][0] << " " << fmap_layer0[1][0][0]  << endl;
+		// cout << output_layer0[0][1][0] << " " << fmap_layer0[0][1][0]  << endl;
+		// cout << output_layer0[0][0][1] << " " << fmap_layer0[0][0][1]  << endl;
+		
 		//Which goes into Conv2d_1
 		conv2d(output_layer0, weights_layer1, biases_layer1, (float *) output_layer1);
 		//compareMatrix3d(output_layer1, fmap_layer1);
 
 		//Which goes into max pooling
 		maxPool2D(output_layer1, (float * )output_maxpool0);
-		//compareMatrix3d(output_maxpool0, fmap_maxpool0);
+		// compareMatrix3d(output_maxpool0, fmap_maxpool0);
 		//Which goes into conv2d_2
 		conv2d(output_maxpool0, weights_layer2, biases_layer2, (float *) output_layer2);
 		//compareMatrix3d(output_layer2, fmap_layer2);
@@ -153,8 +214,18 @@ int main()
 		maxPool2D(output_layer5, (float * )output_maxpool2);
 		// compareMatrix3d(output_maxpool2, fmap_maxpool2);
 		//which then is flattened and put through the 2 dense layers
-		memcpy(flatten, output_maxpool2, sizeof(float) * 2048);
-
+		//memcpy(flatten, output_maxpool2, sizeof(float) * 2048);
+		for(int i = 0; i < 128; i++)
+		{
+			for (int j = 0; j < 4; j++)
+			{
+				for(int k = 0; k < 4; k++)
+				{
+					flatten[i + k*128 + j*(4*128)] = output_maxpool2[i][j][k];
+				}
+			}
+		}
+		
 		denseRelu(flatten, weights_dense0, biases_dense0, (float * )output_dense0);
 		// compare1d(output_dense0, fmap_dense0);
 		//cout << fmap_dense1[0] << " " << output_dense1[0] << endl;

@@ -1,0 +1,39 @@
+#-----------------------------------------------------------
+# Vivado v2020.1 (64-bit)
+# SW Build 2902540 on Wed May 27 19:54:35 MDT 2020
+# IP Build 2902112 on Wed May 27 22:43:36 MDT 2020
+# Start of session at: Mon Nov  1 12:23:38 2021
+# Process ID: 26012
+# Current directory: /home/jrmerkel/Documents/Cpre482/CPRE482X
+# Command line: vivado
+# Log file: /home/jrmerkel/Documents/Cpre482/CPRE482X/vivado.log
+# Journal file: /home/jrmerkel/Documents/Cpre482/CPRE482X/vivado.jou
+#-----------------------------------------------------------
+start_gui
+source /home/jrmerkel/Documents/Cpre482/CPRE482X/cpre482x-lab3/hw/Mac/vivado/tc_staged_mac_ip.tcl
+add_files -norecurse /home/jrmerkel/Documents/Cpre482/CPRE482X/cpre482x-lab3/hw/Mac/hdl/staged_mac_template.vhd
+update_compile_order -fileset sources_1
+source /home/jrmerkel/Documents/Cpre482/CPRE482X/cpre482x-lab3/hw/Mac/hdl/sim.tcl
+launch_simulation
+source /home/jrmerkel/Documents/Cpre482/CPRE482X/cpre482x-lab3/hw/Mac/hdl/sim.tcl
+source staged_mac.tcl
+add_force {/staged_mac/SD_AXIS_TUSER} -radix hex {0 0ns}
+add_force {/staged_mac/SD_AXIS_TLAST} -radix hex {0 0ns}
+close_sim
+source /home/jrmerkel/Documents/Cpre482/CPRE482X/cpre482x-lab3/hw/Mac/hdl/sim.tcl
+source staged_mac.tcl
+close_sim
+source /home/jrmerkel/Documents/Cpre482/CPRE482X/cpre482x-lab3/hw/Mac/hdl/sim.tcl
+source staged_mac.tcl
+source /home/jrmerkel/Documents/Cpre482/CPRE482X/cpre482x-lab3/hw/Mac/hdl/sim.tcl
+close_sim
+source /home/jrmerkel/Documents/Cpre482/CPRE482X/cpre482x-lab3/hw/Mac/hdl/sim.tcl
+source staged_mac.tcl
+run 100
+close_sim
+source /home/jrmerkel/Documents/Cpre482/CPRE482X/cpre482x-lab3/hw/Mac/hdl/sim.tcl
+source staged_mac.tcl
+launch_runs synth_1 -jobs 4
+wait_on_run synth_1
+launch_runs impl_1 -jobs 4
+wait_on_run impl_1
