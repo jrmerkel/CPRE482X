@@ -29,14 +29,53 @@ with signal names, widths, and ports defined.
 e. Calculate (and report) all of the required bit-widths you will need based on the specific layer
 you implemented. Additionally, describe the appropriate quantization approach for the output
 of your accumulator based on Tensorflow Lite’s quantization (i.e., 8-bit integers).
+If we consider a quantized implementation using 8-bit integers, each major signal would need to be 8 bits wide. The width for each
+signal of the design for an 8-bit quantized implementation is shown below:
+SD_AXIS_TREADY: 1 bit
+SD_AXIS_TDATA: 1 bit
+SD_AXIS_TLAST: 1 bit
+SD_AXIS_TUSER: 1 bit
+SD_AXIS_TVALID: 1 bit
+SD_AXIS_TID: 8 bits
+MO_AXIS_TVALID: 1 bit
+MO_AXIS_TDATA: 16 bits -> because it holds two 8-bit values that are separated for registers A and B
+MO_AXIS_TLAST: 1 bit
+MO_AXIS_TREADY: 1 bit
+MO_AXIS_TID: 8 bits
+
+Internal signals:
+signal accum_reg: 16 bits
+signal a_reg: 8 bits
+signal b_reg: 8 bits
+signal user_reg: 1 bit
+
+The accumulator register sums two signals: the previous partial sum (value that was stored in register on the previous cycle) and the output of the multiplier.
+If we assume the multiplier multiplies two quantized, 8-bit values, it's output will be 16 bits. This way, we could pad the upper 8 bits of the previous
+register value with zeros and perform the sum of two 16-bit fixed point values. To quantize from 16 down to 8 bits, we could take the upper 8 bits and define
+that as the output of the accumulator.
+
 
 
 
 f. Implement in VHDL using your previously-designed modules. Test the design for edge-case
 inputs using whatever approach you prefer (VHDL testbench, do file, etc.), and justify why
 your tests were sufficient. Submit your VHDL files and testbench in a folder called Mac.
+Our tests are sufficient because they validate all the functionality that was implemented for this MAC unit. We test that the multiplication is correct,
+we test the accumulator register correctly sums the previous partial sum with the new results and keeps the most updated signal. Besides testing the main components,
+our testing also validates other important operations: setting the accumulator register to a constant, receiving a signal from the 'previous' MAC unit other than
+zero, test the correct operation of the master-slave AXI-Stream Interface Protocol. 
+Ultimately, since this is a simple design with a simple implementation, the simple testbench we created is likely sufficient validation. Considering we didn't 
+directly implement the submodules (the full-adders, the shifter, the multiplier), we can have a high-confidence in the functionality of those operations and know
+we didn't introduce bugs in the system during implementation of the submodules.
 
 
 
 g. Synthesize your MAC unit and report the maximum frequency, resource utilization, and the
 critical path of the design. Separate instructions for this to follow. Calculate the maximum
+layers per cycle and layers per second for your design. Do this for at least 3 data widths.
+The reported worst negative slack is 9.168 ns. Since the clock we ran the synthesis for had a period of 0.1 ns, the shortest clock period our design supports
+is 9.268 ns, or a maximum frequency of 0.11 GHz. The detailed critical path is given in the relevant screenshots inside the hw folder. However, from a high-level
+the critical path is determined by propagating the ripple-carry sums across full-adders, and has a source of setting the clock and destination of the last bit of the
+accumulator register. The screenshot of the resource utilization is also on the same folder, but the most significant resource consumption for our design
+was I/O, where we used 57% of the available registers.
+(How to calculate layers/cycle? Do we need to assume the number of MACs we'd utilize?)
