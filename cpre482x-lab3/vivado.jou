@@ -1,0 +1,85 @@
+#-----------------------------------------------------------
+# Vivado v2020.1 (64-bit)
+# SW Build 2902540 on Wed May 27 19:54:35 MDT 2020
+# IP Build 2902112 on Wed May 27 22:43:36 MDT 2020
+# Start of session at: Mon Nov 15 12:23:37 2021
+# Process ID: 12862
+# Current directory: /home/augustom/Documents/lab_482/CPRE482X/cpre482x-lab3
+# Command line: vivado
+# Log file: /home/augustom/Documents/lab_482/CPRE482X/cpre482x-lab3/vivado.log
+# Journal file: /home/augustom/Documents/lab_482/CPRE482X/cpre482x-lab3/vivado.jou
+#-----------------------------------------------------------
+start_gui
+open_project /home/augustom/tc_staged_mac/tc_staged_mac.xpr
+update_compile_order -fileset sources_1
+reset_run synth_1
+launch_runs synth_1 -jobs 4
+wait_on_run synth_1
+open_run synth_1 -name synth_1
+report_timing_summary -delay_type min_max -report_unconstrained -check_timing_verbose -max_paths 10 -input_pins -routable_nets -name timing_1
+reset_run synth_1
+launch_runs synth_1 -jobs 4
+wait_on_run synth_1
+close_design
+open_run synth_1 -name synth_1
+report_timing_summary -delay_type min_max -report_unconstrained -check_timing_verbose -max_paths 10 -input_pins -routable_nets -name timing_1
+source /home/augustom/Documents/lab_482/CPRE482X/cpre482x-lab3/hw/MacPipe/vivado/tc_piped_mac_ip.tcl
+add_files -norecurse /home/augustom/Documents/lab_482/CPRE482X/cpre482x-lab3/hw/MacPipe/hdl/piped_mac_template.vhd
+update_compile_order -fileset sources_1
+source /home/augustom/Documents/lab_482/CPRE482X/cpre482x-lab3/hw/Mac/hdl/sim.tcl
+source piped_mac.tcl
+source /home/augustom/Documents/lab_482/CPRE482X/cpre482x-lab3/hw/MacPipe/hdl/sim.tcl
+close_sim
+source /home/augustom/Documents/lab_482/CPRE482X/cpre482x-lab3/hw/MacPipe/hdl/sim.tcl
+source piped_mac.tcl
+source /home/augustom/Documents/lab_482/CPRE482X/cpre482x-lab3/hw/Mac/hdl/sim.tcl
+close_sim
+source /home/augustom/Documents/lab_482/CPRE482X/cpre482x-lab3/hw/MacPipe/hdl/sim_pipe.tcl
+source piped_mac.tcl
+source /home/augustom/Documents/lab_482/CPRE482X/cpre482x-lab3/hw/Mac/hdl/sim.tcl
+file mkdir /home/augustom/Documents/lab_482/CPRE482X/cpre482x-lab3/tc_piped_mac/tc_piped_mac.srcs/constrs_1
+launch_runs synth_1 -jobs 4
+wait_on_run synth_1
+current_project tc_staged_mac
+current_project tc_piped_mac
+open_run synth_1 -name synth_1
+report_timing_summary -delay_type min_max -report_unconstrained -check_timing_verbose -max_paths 10 -input_pins -routable_nets -name timing_1
+file mkdir /home/augustom/Documents/lab_482/CPRE482X/cpre482x-lab3/tc_piped_mac/tc_piped_mac.srcs/constrs_1/new
+close [ open /home/augustom/Documents/lab_482/CPRE482X/cpre482x-lab3/tc_piped_mac/tc_piped_mac.srcs/constrs_1/new/timing_pipelined.xdc w ]
+add_files -fileset constrs_1 /home/augustom/Documents/lab_482/CPRE482X/cpre482x-lab3/tc_piped_mac/tc_piped_mac.srcs/constrs_1/new/timing_pipelined.xdc
+report_timing_summary -delay_type min_max -report_unconstrained -check_timing_verbose -max_paths 10 -input_pins -routable_nets -name timing_2
+refresh_design
+report_timing_summary -delay_type min_max -report_unconstrained -check_timing_verbose -max_paths 10 -input_pins -routable_nets -name timing_1
+close_sim
+source /home/augustom/Documents/lab_482/CPRE482X/cpre482x-lab3/hw/MacPipe/hdl/sim_pipe.tcl
+source piped_mac.tcl
+report_timing_summary -delay_type min_max -report_unconstrained -check_timing_verbose -max_paths 10 -input_pins -routable_nets -name timing_2
+current_project tc_staged_mac
+report_timing_summary -delay_type min_max -report_unconstrained -check_timing_verbose -max_paths 10 -input_pins -routable_nets -name timing_2
+reset_run synth_1
+launch_runs synth_1 -jobs 4
+wait_on_run synth_1
+close_design
+open_run synth_1 -name synth_1
+report_timing_summary -delay_type min_max -report_unconstrained -check_timing_verbose -max_paths 10 -input_pins -routable_nets -name timing_1
+source /home/augustom/Documents/lab_482/CPRE482X/cpre482x-lab3/hw/MacPipe/hdl/sim_pipe.tcl
+source staged_mac.tcl
+current_project tc_piped_mac
+add_force {/staged_mac/ACLK} -radix hex {0 0ns} {1 50000ps} -repeat_every 100000ps
+close_sim
+source /home/augustom/Documents/lab_482/CPRE482X/cpre482x-lab3/hw/MacPipe/hdl/sim_pipe.tcl
+close_sim
+source /home/augustom/Documents/lab_482/CPRE482X/cpre482x-lab3/hw/MacPipe/hdl/sim_pipe.tcl
+source piped_mac.tcl
+close_sim
+source /home/augustom/Documents/lab_482/CPRE482X/cpre482x-lab3/hw/MacPipe/hdl/sim_pipe.tcl
+source piped_mac.tcl
+close_sim
+source /home/augustom/Documents/lab_482/CPRE482X/cpre482x-lab3/hw/MacPipe/hdl/sim_pipe.tcl
+source piped_mac.tcl
+reset_run synth_1
+launch_runs synth_1 -jobs 4
+wait_on_run synth_1
+close_design
+open_run synth_1 -name synth_1
+report_timing_summary -delay_type min_max -report_unconstrained -check_timing_verbose -max_paths 10 -input_pins -routable_nets -name timing_1

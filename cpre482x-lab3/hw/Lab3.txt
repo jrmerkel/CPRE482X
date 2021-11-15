@@ -29,6 +29,7 @@ with signal names, widths, and ports defined.
 e. Calculate (and report) all of the required bit-widths you will need based on the specific layer
 you implemented. Additionally, describe the appropriate quantization approach for the output
 of your accumulator based on Tensorflow Lite’s quantization (i.e., 8-bit integers).
+The layer we're considering is the first 2D convolutional layer.
 If we consider a quantized implementation using 8-bit integers, each major signal would need to be 8 bits wide. The width for each
 signal of the design for an 8-bit quantized implementation is shown below:
 SD_AXIS_TREADY: 1 bit
@@ -78,4 +79,25 @@ is 9.268 ns, or a maximum frequency of 0.11 GHz. The detailed critical path is g
 the critical path is determined by propagating the ripple-carry sums across full-adders, and has a source of setting the clock and destination of the last bit of the
 accumulator register. The screenshot of the resource utilization is also on the same folder, but the most significant resource consumption for our design
 was I/O, where we used 57% of the available registers.
-(How to calculate layers/cycle? Do we need to assume the number of MACs we'd utilize?)
+To calculate how much time it takes to perform all the operations required for one layer, we need to calculate the total number of MACs first. Considering the first
+2D convolutional layer, and the formula to compute total number of MAC's=PQMNSRC, where P=60,Q=60,M=32,N=1,S=5,R=5,C=3 for the first layer, the total number
+of MACs is 8,640,000. If we consider our MAC unit frequency of 0.11GHz, the total time to perform all MAC operations related to the first layer would be
+8640000/0.11e9 = 78.5 ms. Changing the width of the data would not change the total number of operations needed but it could affect the MAC frequency. The 
+first synthesis we made considered the data width to be 32 bits. Let's simulate the maximum clock frequency for 4 and 8 bit values. For 8-bit values, the worst
+reported slack is 7.032 ns - considering our target clock was 0.1 ns, the resulting frequency would be 0.14 GHz. For that frequency, the total time would be 61.7 ms.
+For 4-bit data width, the worst negative slack is 5.483 ns, resulting in a frequency of 0.18GHz. The total time considering the frequency for 4 bits is 48 ms.
+
+
+3.4 Pipelined MAC
+1. We inserted one pipeline register between the multiply and accumulate operations. We haven't pipelined between the shift and add operations because the 
+critical path for the multiplication would be greater than both of their times combined, and we wouldn't increase clock frequency.
+(inlcude figure later)
+The maximum number of stages for our pipeline is 3, considering the A and B registers that receive the multiplication input.
+
+2. Similarly to before, our tests validate correct functioning of all the operations relevant to this MAC unit. We used the same test from the previous partial
+since our inputs and outputs to the MAC unit are the same. Hence, the justification why our tests are sufficient is the same.
+
+3. The worst slack was 8 ns, which results in a frequency of 0.123 GHz. Considering the total MAC operations calculated before and the new clock frequency for
+32 bits, the total time for one layer is 70.1 ms. 
+
+4. 

@@ -82,7 +82,7 @@ architecture behavioral of piped_mac is
     signal a_reg : std_logic_vector(C_DATA_WIDTH-1 downto 0);
     signal b_reg : std_logic_vector(C_DATA_WIDTH-1 downto 0);
     --Register the result of the multiplication
-    signal mul_reg : std_logic_vector(C_DATA_WIDTH*2-1 downto 0);
+    signal mul_reg : std_logic_vector(C_DATA_WIDTH+C_DATA_WIDTH/2-1 downto 0);
 
 	signal user_reg : std_logic;
 	-- Mac state
@@ -148,7 +148,7 @@ begin
                     accum_reg <= std_logic_vector(resize(signed(b_reg), accum_reg'length));
                     mul_reg <= (others => '0');
                 else
-                    mul_reg <= signed(a_reg) * signed(b_reg),C_DATA_WIDTH/2)); 
+                    mul_reg <= std_logic_vector(resize(shift_right(signed(a_reg) * signed(b_reg), C_DATA_WIDTH/2), mul_reg'length)); 
                 end if;
                 --s
                 if SD_AXIS_TVALID = '0' then
@@ -156,7 +156,7 @@ begin
                 elsif SD_AXIS_TLAST = '1' then
                     state <= PROCESS_LAST;
                     SD_AXIS_TREADY <= '0';
-                else then
+                else
                     state <= PROCESS_VALUES;
                 end if;
                 --Output
@@ -169,8 +169,8 @@ begin
                     accum_reg <= std_logic_vector(resize(signed(b_reg), accum_reg'length));
                     mul_reg <= (others => '0');
                 else
-                    accum_reg <= std_logic_vector(signed(accum_reg) + shift_right(mul_reg,C_DATA_WIDTH/2)); 
-                    mul_reg <= signed(a_reg) * signed(b_reg),C_DATA_WIDTH/2)); 
+                    accum_reg <= std_logic_vector(signed(accum_reg) + resize(signed(mul_reg), accum_reg'length)); 
+                    mul_reg <= std_logic_vector(resize(shift_right(signed(a_reg) * signed(b_reg), C_DATA_WIDTH/2), mul_reg'length)); 
                 end if;
             
                 --s
@@ -190,7 +190,7 @@ begin
                     accum_reg <= std_logic_vector(resize(signed(b_reg), accum_reg'length));
                     mul_reg <= (others => '0');
                 else
-                    accum_reg <= std_logic_vector(signed(accum_reg) + shift_right(mul_reg,C_DATA_WIDTH/2))); 
+                    accum_reg <= std_logic_vector(signed(accum_reg) + signed(mul_reg)); 
                 end if;
                 state <= WAIT_FOR_VALUES;
                 SD_AXIS_TREADY <= '1';
