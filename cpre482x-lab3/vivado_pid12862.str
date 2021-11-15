@@ -3871,3 +3871,5 @@ selectTable(PAResourceTtoZ.TimingItemFlatTablePanel_TABLE, "Path 1 ; -7.989067 ;
 selectButton(PAResourceCommand.PACommandNames_SCHEMATIC, "TimingPathsResultPanel_run_schematic"); // E (g, cs)
 // Run Command: PAResourceCommand.PACommandNames_SCHEMATIC
 // Schematic: addNotify
+// Elapsed time: 419 seconds
+selectTab("PlanAheadTabBaseWorkspace_JideTabbedPane", (HResource) null, "piped_mac_template.vhd", 2); // m (l, cs)
