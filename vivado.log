@@ -505,3 +505,7 @@ Run output will be captured here: /home/jrmerkel/Documents/Cpre482/CPRE482X/tc_s
 launch_runs impl_1 -jobs 4
 [Mon Nov  1 13:57:59 2021] Launched impl_1...
 Run output will be captured here: /home/jrmerkel/Documents/Cpre482/CPRE482X/tc_staged_mac/tc_staged_mac.runs/impl_1/runme.log
+close_sim
+INFO: [Simtcl 6-16] Simulation closed
+exit
+INFO: [Common 17-206] Exiting Vivado at Mon Nov  1 14:40:34 2021...

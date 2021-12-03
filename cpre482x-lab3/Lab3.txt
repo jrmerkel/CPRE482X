@@ -1,0 +1,104 @@
+a. Describe the modules functionality, including how to control the accumulator state. Would
+you ever need to put a non-zero value in? Why?
+
+The function of this module is to take in two values of size C_DATA_WIDTH then on the next cycle multiply and accumulate into another register of size C_DATA_WIDTH*2.
+The output of this Mac unit is the clamped value of the least significant C_DATA_WIDTH - 1 downto 0.
+In order to set to a constant (the reason being to set a bias for non-zero or to reset the accumulation) the TUSER flag is set to '1'
+
+
+b. Identify a few sample inputs and corresponding outputs that you expect for this module.
+
+Sample inputs are the weights and the activations from the previous layer. This will be two 8-bit signed values that are multiplied together and then accumulated.
+The biases will be another input.
+For example, a series of values such as 
+--set accumulator using TUSER
+0x000F
+0x08 * 0x20 + 0x000F = 0x001F
+0x23 * 0x80 + 0x001F = EE9F
+
+c. Define the module interface (i.e., draw the symbol box around the basic design provided by
+the textbook).
+See box.drawio.png
+
+
+d. Prior to authoring the HDL of your implementation, create a schematic diagram of you design
+with signal names, widths, and ports defined.
+see Schematic.drawio.png
+
+
+e. Calculate (and report) all of the required bit-widths you will need based on the specific layer
+you implemented. Additionally, describe the appropriate quantization approach for the output
+of your accumulator based on Tensorflow Lite’s quantization (i.e., 8-bit integers).
+The layer we're considering is the first 2D convolutional layer.
+If we consider a quantized implementation using 8-bit integers, each major signal would need to be 8 bits wide. The width for each
+signal of the design for an 8-bit quantized implementation is shown below:
+SD_AXIS_TREADY: 1 bit
+SD_AXIS_TDATA: 1 bit
+SD_AXIS_TLAST: 1 bit
+SD_AXIS_TUSER: 1 bit
+SD_AXIS_TVALID: 1 bit
+SD_AXIS_TID: 8 bits
+MO_AXIS_TVALID: 1 bit
+MO_AXIS_TDATA: 16 bits -> because it holds two 8-bit values that are separated for registers A and B
+MO_AXIS_TLAST: 1 bit
+MO_AXIS_TREADY: 1 bit
+MO_AXIS_TID: 8 bits
+
+Internal signals:
+signal accum_reg: 16 bits
+signal a_reg: 8 bits
+signal b_reg: 8 bits
+signal user_reg: 1 bit
+
+The accumulator register sums two signals: the previous partial sum (value that was stored in register on the previous cycle) and the output of the multiplier.
+If we assume the multiplier multiplies two quantized, 8-bit values, it's output will be 16 bits. This way, we could pad the upper 8 bits of the previous
+register value with zeros and perform the sum of two 16-bit fixed point values. To quantize from 16 down to 8 bits, we could take the upper 8 bits and define
+that as the output of the accumulator.
+
+
+
+
+f. Implement in VHDL using your previously-designed modules. Test the design for edge-case
+inputs using whatever approach you prefer (VHDL testbench, do file, etc.), and justify why
+your tests were sufficient. Submit your VHDL files and testbench in a folder called Mac.
+Our tests are sufficient because they validate all the functionality that was implemented for this MAC unit. We test that the multiplication is correct,
+we test the accumulator register correctly sums the previous partial sum with the new results and keeps the most updated signal. Besides testing the main components,
+our testing also validates other important operations: setting the accumulator register to a constant, receiving a signal from the 'previous' MAC unit other than
+zero, test the correct operation of the master-slave AXI-Stream Interface Protocol. 
+Ultimately, since this is a simple design with a simple implementation, the simple testbench we created is likely sufficient validation. Considering we didn't 
+directly implement the submodules (the full-adders, the shifter, the multiplier), we can have a high-confidence in the functionality of those operations and know
+we didn't introduce bugs in the system during implementation of the submodules.
+
+
+
+g. Synthesize your MAC unit and report the maximum frequency, resource utilization, and the
+critical path of the design. Separate instructions for this to follow. Calculate the maximum
+layers per cycle and layers per second for your design. Do this for at least 3 data widths.
+The reported worst negative slack is 9.168 ns. Since the clock we ran the synthesis for had a period of 0.1 ns, the shortest clock period our design supports
+is 9.268 ns, or a maximum frequency of 0.11 GHz. The detailed critical path is given in the relevant screenshots inside the hw folder. However, from a high-level
+the critical path is determined by propagating the ripple-carry sums across full-adders, and has a source of setting the clock and destination of the last bit of the
+accumulator register. The screenshot of the resource utilization is also on the same folder, but the most significant resource consumption for our design
+was I/O, where we used 57% of the available registers.
+To calculate how much time it takes to perform all the operations required for one layer, we need to calculate the total number of MACs first. Considering the first
+2D convolutional layer, and the formula to compute total number of MAC's=PQMNSRC, where P=60,Q=60,M=32,N=1,S=5,R=5,C=3 for the first layer, the total number
+of MACs is 8,640,000. If we consider our MAC unit frequency of 0.11GHz, the total time to perform all MAC operations related to the first layer would be
+8640000/0.11e9 = 78.5 ms. Changing the width of the data would not change the total number of operations needed but it could affect the MAC frequency. The 
+first synthesis we made considered the data width to be 32 bits. Let's simulate the maximum clock frequency for 4 and 8 bit values. For 8-bit values, the worst
+reported slack is 7.032 ns - considering our target clock was 0.1 ns, the resulting frequency would be 0.14 GHz. For that frequency, the total time would be 61.7 ms.
+For 4-bit data width, the worst negative slack is 5.483 ns, resulting in a frequency of 0.18GHz. The total time considering the frequency for 4 bits is 48 ms.
+
+
+3.4 Pipelined MAC
+1. We inserted one pipeline register between the multiply and accumulate operations. We haven't pipelined between the shift and add operations because the 
+critical path for the multiplication would be greater than both of their times combined, and we wouldn't increase clock frequency.
+See PipeFig.drawio.png
+The maximum number of stages for our pipeline is 3, considering the A and B registers that receive the multiplication input.
+
+2. Similarly to before, our tests validate correct functioning of all the operations relevant to this MAC unit. We used the same test from the previous partial
+since our inputs and outputs to the MAC unit are the same. Hence, the justification why our tests are sufficient is the same.
+
+3. The worst slack was 8 ns, which results in a frequency of 0.123 GHz. Considering the total MAC operations calculated before and the new clock frequency for
+32 bits, the total time for one layer is 70.1 ms. 
+
+4. The hazards that exist in this design come from the fact that the pipeline to calulcate is now two stages instead of one. 
+This means when you reset this mac unit it takes two cycles before the value gets accumulated. If the accumulated value is used in the next layer you would have to wait the additional two cycles for that value to propagate.

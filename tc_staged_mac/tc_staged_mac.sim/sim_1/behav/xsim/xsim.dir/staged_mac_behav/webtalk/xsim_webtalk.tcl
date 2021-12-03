@@ -1,6 +1,6 @@
 webtalk_init -webtalk_dir /home/jrmerkel/Documents/Cpre482/CPRE482X/tc_staged_mac/tc_staged_mac.sim/sim_1/behav/xsim/xsim.dir/staged_mac_behav/webtalk/
 webtalk_register_client -client project
-webtalk_add_data -client project -key date_generated -value "Mon Nov  1 13:28:53 2021" -context "software_version_and_target_device"
+webtalk_add_data -client project -key date_generated -value "Mon Nov  1 14:40:32 2021" -context "software_version_and_target_device"
 webtalk_add_data -client project -key product_version -value "XSIM v2020.1 (64-bit)" -context "software_version_and_target_device"
 webtalk_add_data -client project -key build_version -value "2902540" -context "software_version_and_target_device"
 webtalk_add_data -client project -key os_platform -value "LIN64" -context "software_version_and_target_device"
@@ -14,19 +14,19 @@ webtalk_add_data -client project -key target_package -value "not_applicable" -co
 webtalk_add_data -client project -key target_speed -value "not_applicable" -context "software_version_and_target_device"
 webtalk_add_data -client project -key random_id -value "5a592446-0bde-4c0c-a279-56034f2ec264" -context "software_version_and_target_device"
 webtalk_add_data -client project -key project_id -value "cffdb5cc151a47b4a98ad6f45909676a" -context "software_version_and_target_device"
-webtalk_add_data -client project -key project_iteration -value "7" -context "software_version_and_target_device"
+webtalk_add_data -client project -key project_iteration -value "8" -context "software_version_and_target_device"
 webtalk_add_data -client project -key os_name -value "RedHatEnterpriseWorkstation" -context "user_environment"
 webtalk_add_data -client project -key os_release -value "Red Hat Enterprise Linux Workstation release 7.9 (Maipo)" -context "user_environment"
 webtalk_add_data -client project -key cpu_name -value "Intel(R) Xeon(R) CPU E3-1240 v6 @ 3.70GHz" -context "user_environment"
-webtalk_add_data -client project -key cpu_speed -value "1459.088 MHz" -context "user_environment"
+webtalk_add_data -client project -key cpu_speed -value "3959.027 MHz" -context "user_environment"
 webtalk_add_data -client project -key total_processors -value "1" -context "user_environment"
 webtalk_add_data -client project -key system_ram -value "16.000 GB" -context "user_environment"
 webtalk_register_client -client xsim
 webtalk_add_data -client xsim -key Command -value "xsim" -context "xsim\\command_line_options"
 webtalk_add_data -client xsim -key trace_waveform -value "true" -context "xsim\\usage"
-webtalk_add_data -client xsim -key runtime -value "2500 ns" -context "xsim\\usage"
+webtalk_add_data -client xsim -key runtime -value "3500 ns" -context "xsim\\usage"
 webtalk_add_data -client xsim -key iteration -value "1" -context "xsim\\usage"
-webtalk_add_data -client xsim -key Simulation_Time -value "0.04_sec" -context "xsim\\usage"
+webtalk_add_data -client xsim -key Simulation_Time -value "0.44_sec" -context "xsim\\usage"
 webtalk_add_data -client xsim -key Simulation_Memory -value "133124_KB" -context "xsim\\usage"
-webtalk_transmit -clientid 152423039 -regid "" -xml /home/jrmerkel/Documents/Cpre482/CPRE482X/tc_staged_mac/tc_staged_mac.sim/sim_1/behav/xsim/xsim.dir/staged_mac_behav/webtalk/usage_statistics_ext_xsim.xml -html /home/jrmerkel/Documents/Cpre482/CPRE482X/tc_staged_mac/tc_staged_mac.sim/sim_1/behav/xsim/xsim.dir/staged_mac_behav/webtalk/usage_statistics_ext_xsim.html -wdm /home/jrmerkel/Documents/Cpre482/CPRE482X/tc_staged_mac/tc_staged_mac.sim/sim_1/behav/xsim/xsim.dir/staged_mac_behav/webtalk/usage_statistics_ext_xsim.wdm -intro "<H3>XSIM Usage Report</H3><BR>"
+webtalk_transmit -clientid 503888621 -regid "" -xml /home/jrmerkel/Documents/Cpre482/CPRE482X/tc_staged_mac/tc_staged_mac.sim/sim_1/behav/xsim/xsim.dir/staged_mac_behav/webtalk/usage_statistics_ext_xsim.xml -html /home/jrmerkel/Documents/Cpre482/CPRE482X/tc_staged_mac/tc_staged_mac.sim/sim_1/behav/xsim/xsim.dir/staged_mac_behav/webtalk/usage_statistics_ext_xsim.html -wdm /home/jrmerkel/Documents/Cpre482/CPRE482X/tc_staged_mac/tc_staged_mac.sim/sim_1/behav/xsim/xsim.dir/staged_mac_behav/webtalk/usage_statistics_ext_xsim.wdm -intro "<H3>XSIM Usage Report</H3><BR>"
 webtalk_terminate
